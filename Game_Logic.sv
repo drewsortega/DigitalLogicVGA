@@ -7,8 +7,8 @@ module Game_Logic(
 	output logic Y
 	);
 	
-	logic[1:0] Current;
-	
+	logic[1:0] Current = 2'b00;
+
 always_comb 
 	begin
 		if(Down == 1)
@@ -19,7 +19,7 @@ always_comb
 		if(Up == 1)
 			begin 
 				if(Current[0] == 0) //Move the player up if they are in a lower square
-					Currrent[0] = 1;
+					Current[0] = 1;
 			end
 		if(Right == 1)
 			begin
