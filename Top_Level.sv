@@ -1,8 +1,8 @@
-module Top_Level {
+module Top_Level (
     input logic CLK,
     input logic[1:0] Choice_Player1,
     input logic[1:0] Choice_Player2,
-};
+);
 logic X1, Y1, X2, Y2;
 
 Player player1(.CLK(CLK), .X(X1), .Y(Y1));

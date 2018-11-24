@@ -1,4 +1,4 @@
-module Input_Decoder {
+module Input_Decoder (
     input logic CLK;
 
     input logic[1:0] Choice,
@@ -25,7 +25,7 @@ module Input_Decoder {
     output logic Down,
     output logic Left,
     output logic Right
-}
+);
 always_ff(@posedge CLK) 
 begin
     case(choice)

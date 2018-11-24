@@ -1,4 +1,4 @@
-module Player {
+module Player (
     //Clock from top level
     input logic CLK,
 
@@ -17,7 +17,7 @@ module Player {
     //Outputs to renderer
     output logic X,
     output logic Y
-};
+);
     logic NReadable, IReadable, PReadable, NU, ND, NL, NR, IU, ID, IL, IR, PU, PD, PL, PR, UpDecoded, DownDecoded, LeftDecoded, RightDecoded;
     SNES_Input nController(
         .Data(NData),
