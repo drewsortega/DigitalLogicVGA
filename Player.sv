@@ -1,6 +1,6 @@
 module Player (
     //Clock from top level
-    input logic CLK,
+    input logic Clock,
 
     //choice of controller
     input logic[1:0] Choice,
@@ -20,13 +20,16 @@ module Player (
 );
     logic NReadable, IReadable, PReadable, NU, ND, NL, NR, IU, ID, IL, IR, PU, PD, PL, PR, UpDecoded, DownDecoded, LeftDecoded, RightDecoded;
     SNES_Input nController(
+        //Required Values already defined
         .Data(NData),
         .Mode(Choice),
-        .Clock(CLK),
+        .Clock(Clock),
 
+        //SNES/NES Specific IO
         .Strobe_Latch(NStrobe_Latch),
         .Shift_Clock(NShift_Clock),
 
+        //universal IO
         .Up(NU), 
         .Down(ND), 
         .Left(NL), 
@@ -35,11 +38,16 @@ module Player (
     );
     
     IR_Input irController(
-        //TODO: Get IR Stuff
+        //required values already defined
+        .Clock(Clock),
+        .Data(IRData),
+
+        //universal IO
         .Up(IU), 
         .Down(ID), 
         .Left(IL), 
-        .Right(IR)
+        .Right(IR),
+        .Readable(IReadable)
     );
     
     PS2_Input ps2Controller(
@@ -51,7 +59,7 @@ module Player (
     );
 
     InputDecoder inputDecoder(
-        .CLK(CLK),
+        .CLK(Clock),
         .Choice(Choice),
 
         .PU(PU),

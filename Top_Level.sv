@@ -5,6 +5,7 @@ module Top_Level (
 );
 logic X1, Y1, X2, Y2;
 
+//TODO: all of this 
 Player player1(.CLK(CLK), .X(X1), .Y(Y1));
 Player player2(.CLK(CLK), .X(X2), .Y(Y2));
 

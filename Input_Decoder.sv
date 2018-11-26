@@ -26,7 +26,7 @@ module Input_Decoder (
     output logic Left,
     output logic Right
 );
-always_ff(@posedge CLK) 
+always_ff @(posedge CLK) 
 begin
     case(choice)
         
