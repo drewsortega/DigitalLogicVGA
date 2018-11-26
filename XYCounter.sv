@@ -8,83 +8,51 @@ module XYCounter(
 	);
 	
 	logic [0:0] clock_enable = 1;
-	logic [2:0] state = 0;
-	logic [14:0] delay = 0;
+	logic [9:0] xstate = 0;
+	logic [9:0] ystate = 0;
 
 	always_ff @(posedge clock)
 	begin
 		clock_enable <= !clock_enable;
 		if (clock_enable) begin
-			case (state)
-				0: begin
-						if (xcoord < 640)
-							xcoord <= xcoord + 1;
-						else begin
-							xcoord <= 0;
-							state <= 1;
-							nocolor <= 1;
-						end
-					end
-				1: begin
-						if (delay < 16)
-							delay <= delay + 1;
-						else begin
-							hsync <= 0;
-							delay <= 0;
-							state <= 2;
-						end
-					end
-				2: begin
-						if (delay < 96)
-							delay <= delay + 1;
-						else begin
-							hsync <= 1;
-							delay <= 0;
-							state <= 3;
-						end
-					end
-				3: begin
-						if (delay < 48)
-							delay <= delay + 1;
-						else begin
-							delay <= 0;
-							if (ycoord < 480) begin
-								state <= 0;
-								ycoord <= ycoord + 1;
-								nocolor <= 0;
-							end else begin
-								state <= 4;
-								ycoord <= 0;
-							end
-						end
-					end
-				4: begin
-						if (delay < 8000)
-							delay <= delay + 1;
-						else begin
-							vsync <= 0;
-							delay <= 0;
-							state <= 5;
-						end
-					end
-				5: begin
-						if (delay < 1600)
-							delay <= delay + 1;
-						else begin
-							vsync <= 1;
-							delay <= 0;
-							state <= 6;
-						end
-					end
-				6: begin
-						if (delay < 26400)
-							delay <= delay + 1;
-						else begin
-							delay <= 0;
-							state <= 0;
-						end
-					end
-			endcase
+		
+			if (xstate < 800) begin
+				xstate <= xstate + 1;
+			end else begin
+				xstate <= 0;
+			end
+
+			if (xstate < 640) begin
+				xcoord <= xstate;
+			end else if (xstate == 640) begin
+				xcoord <= 0;
+			end else if (xstate == 656) begin
+				hsync <= 0;
+			end else if (xstate == 752) begin
+				hsync <= 1;
+			end else if (xstate == 800) begin
+				if (ystate < 525) begin
+					ystate <= ystate + 1;
+				end else begin
+					ystate <= 0;
+				end
+				
+				if (ystate < 480) begin
+					ycoord <= ystate;
+				end else if (ystate == 480) begin
+					ycoord <= 0;
+				end else if (ystate == 490) begin
+					vsync <= 0;
+				end else if (ystate == 492) begin
+					vsync <= 1;
+				end
+			end
+			
+			if (xstate >= 640 || ystate >= 480) begin
+				nocolor <= 1;
+			end else begin
+				nocolor <= 0;
+			end
 		end
 	end
 		
