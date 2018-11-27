@@ -44,12 +44,9 @@
 \section{Introduction}
 Some introduction Text Here
 
-\section{Design}
-Some design text here
-\subsection{Item1Title}
-Some Subsection here
-\subsection{SecondSub Section}
-Other Subsecion Here
+\section{Top Level Design}
+Top Level Design Text Here
+
 \section{Controllers}
 \subsection{NES/SNES Controller}
 The NES and SNES controllers utilize three lines to transfer data, along with a ground and 5V power supply. Communication wit the controllers uses a data latch line, clock line and data line. The clock and data latch lines are supplied to the controller, while the data line is generated. When the latch line is driven high, the controllers log the pressed buttons within an active low shift register. The first bit of this register is automatically output on the data line. Whenever the clock input is cycled, the shift register moves along by one bit. The NES controller has eight buttons, and an eight bit shift register, while the SNES has sixteen buttons and a sixteen bit shift register. The data latch can then be cycled to obtain a new set of inputs. For this design, the up, down, left, and right inputs were of interest. Within the NES controller, the zeroth bit of the shift register corresponds to the right input, the first to  the left input, the second to the down input, and the fourth to the up input. The final four inputs were ignored. Within the SNES controller, the up input corresponds to the fifth bit in the shift register, the down input to the sixth bit, the left input to the seventh bit, and the right input to the eight bit. \\~\\
@@ -64,6 +61,43 @@ To communicate with the NES or SNES controllers, the host must do the following:
 4. The next data bit can now be read
 \newline
 5. Steps 3-4 should be repeated 7 times for the NES, 15 times for the SNES(as the first bit of the register is already present, one less clock cycle is needed)
+\subsection{IR Controller}
+\subsubsection{Self-Clocking Signal}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{figures/placeholder.png}
+    \caption{Manchester Code/Bi-Phase Coding: from Data to Output}
+    \label{fig:biPhaseExample}
+\end{figure}
+\label{subsubsec:selfClockingSignal}
+The IR Controller uses a self-clocking signal to send data to the receiver.
+For a signal to be self-clocking, the source must have a clock of a specified speed and a serial data output.
+The source combines the clock and serial output in to a single serial output of a designated encoding.
+For the IR Controller, the IEEE Manchester Code specification, also known as "Bi-Phase Coding" (BPC), is used.
+For BPC, the source checks the data it wishes to output on every rising edge of its clock.
+If the data to be transmitted is a 1, than the serial output is driven to mimic the clock for that cycle.
+Essentially, it rises on a rising edge of a clock, and falls on the falling edge of the clock.
+If the data to be transmitted is a 0, than the serial output begins to be the inverted signal of the clock.
+It falls on the rising edfe of the clock, and rises on the falling edge of the clock. 
+What a Bi-Phase Coding might look like can be found in Figure \ref{fig:biPhaseExample}.
+\subsubsection{IR Signal \& RC 5 Code}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{figures/placeholder.png}
+    \caption{RC 5 Code - Chunk and delay}
+    \label{fig:rc5Code}
+\end{figure}
+This implementation of IR reception assumes that the IR signal received will be in the form of BPC, as explained in \ref{subsubsec:selfClockingSignal}.
+There are several standards for IR data transmission. The that is decoded for this design is the RC 5 Code (RC5).
+RC5 sends data in chunks, separated by a static amount of clock cycles at 36 kHz. Each chunk is has four sections, totalling to 14 bits.
+\begin{itemize}
+    \item[-] Section 1 - Start Bits (2 bits): Help orient the reciever to understand source clock timing.
+    \item[-] Section 2 - Toggle Bit (1 bit): Defines whether or not this chunk is a new key press or a held key already transmitted.
+    \item[-] Section 3 - Address (5 bits): Defines the address of the receiver. If this does not match the expected address, the data is ignored.
+    \item[-] Section 4 - Data (6 bits): Defines the actual data of the chunk, up to 6 bits. A single combination represents an individual button.
+\end{itemize}
+After the full chunk has been transmitted, the serial data signal is driven to 0 for 50 clock cycles before data is transmitted again.
+After the 50 clock cycles, if a button on the controller is still being pressed, the transmitter on the controller will send the same data chunk again, except the toggle bit will be 0 instead of 1.
+If after 50 cycles no data is read, there is no button being pressed or the receiver is not receiving data.
+The structure and timing of RC 5 Code can be found in Figure \ref{fig:rc5Code}.
 
 \section{HDL Modules}
 \subsection{NES/SNES input decoder}
@@ -84,6 +118,61 @@ For this simulation, the data bit for right was driven low(representing an input
 SNES: \\
 For this simulation, the data bits for up and left were driven low(representing inputs of 'left' and 'up'). The data\_latch is initially driven high. As expected, the decoder logs the up and left inputs as pressed, and continues through the inputs by providing a shift\_clock to the controller. Once the data has been cycled eight times, all values of interest are accounted for, and the readable output is driven high. After fifteen cycles of the output, the data\_latch is again driven high and readable is driven low; new inputs are ready to be read. The value of increment represents the current bit of the shift register.\\~\\
 This module will use the system clock to drive its logic. On the first clock cycle, the data latch output will be driven high to log the controller inputs. The data latch will then be driven low, and the shift clock will be cycled seven times for the NES controller, or fifteen times for the SNES controller, with the bit corresponding to the inputs of interest recorded. Once all inputs of interest have been recorded, the readable output will be driven high, signaling all inputs are accounted for. Pressed buttons on the controllers will be signaled by a high value on the corresponding output from the decoder(up, down, left, or right). 
+
+\subsection{IR Input Decoder}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{figures/placeholder.png}
+    \caption{IR Top Module Diagram}
+    \label{fig:irInputDecoderBlock}
+\end{figure}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{figures/placeholder.png}
+    \caption{IR Top Module Simulation}
+    \label{fig:irInputDecoderSim}
+\end{figure}
+Top text TODO
+
+\subsubsection{IR Clock}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{figures/placeholder.png}
+    \caption{IR Clock Slowing Block Diagram}
+    \label{fig:irClockBlock}
+\end{figure}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{figures/placeholder.png}
+    \caption{IR Clock Simulation}
+    \label{fig:irClockSim}
+\end{figure}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{figures/placeholder.png}
+    \caption{IR data received vs. 72 kHz Clock}
+    \label{fig:asyncIRData}
+\end{figure}
+The IR Input reciever takes in the BPC serial data stream and a 50MHz Clock signal. A slowed clock is generated to slow it down to approximately 72 kHz.
+This is achieved by dividing the 50 MHz clock by 694. However, if the Clock was flipped every 694 50 MHz cycles, it would have a clock cycle of 36 kHz. 
+To account for this, we must double the resulting clock, by dividing the original clock by 347.
+With the 72 kHz clock, for each rising edge of this clock the IR signal will have either a rising edge or a falling edge. 
+Since the IR signal is asynchronous, meaning its clock will not line up with our clock, the 72 kHz clock can check on each of its rising edges whether or not the Data input is a 0 or a 1.
+An example of what the async data vs our internal clock can be found in Figure \ref{fig:asyncIRData}.
+\subsubsection{IR Parser}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{figures/placeholder.png}
+    \caption{IR Decoder Simulation}
+    \label{fig:irParserBlock}
+\end{figure}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{figures/placeholder.png}
+    \caption{IR Decoder Simulation}
+    \label{fig:irParserSim}
+\end{figure}
+TODO
+
+\subsection{PS/2 Input Decoder}
+TODO
+
+\subsection{Input Decoder/Multiplexer}
+TODO
+
 \subsection{Game Logic Controller}
 \begin{figure}[H]
 	\includegraphics[width=\linewidth]{Game_Logic_ModelSim.png}
@@ -95,5 +184,21 @@ Simulation: \\~\\
 Within this simulation, the initial position of the player, 0,0. The up input is driven high, and as expected the coordinate output for Y also changes to high. Next, a right input is provided, and again the coordinates change such that X is high. After this, down is driven high and then left is driven high, resulting in the coordinates shifting to 0,1 then 0,0. Finally, both up and right are driven high, resulting in a coordinate of 1,1.\\~\\
 This module will use combinational logic to determine the coordinate state of a player. The current position is stored within the module, and from the provided values of up, down, left, and right the next position is determined. An input that would result in the player going outside of the coordinate bounds(0,0 to 1,1) is ignored. Multiple inputs can be accepted at once, allowing for diagonal movement.  
 
+\subsection{Player Top Module}
+TODO
+
+\subsection{Pixel Counter}
+TODO
+
+\subsection{Renderer}
+TODO
+
+\section{Putting it Together}
+TODO
+
+\section{Extra Implementation}
+TODO
+\section{Appendix}
+TODO
 
 \end{document}
