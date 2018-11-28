@@ -68,8 +68,8 @@ To communicate with the NES or SNES controllers, the host must do the following:
 5. Steps 3-4 should be repeated 7 times for the NES, 15 times for the SNES(as the first bit of the register is already present, one less clock cycle is needed)
 \subsection{IR Controller}
 \subsubsection{Self-Clocking Signal}
-\begin{figure}[H]
-    \includegraphics[width=\linewidth]{figures/placeholder.png}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
     \caption{Manchester Code/Bi-Phase Coding: from Data to Output} 
     \label{fig:biPhaseExample}
 \end{figure}
@@ -85,8 +85,8 @@ If the data to be transmitted is a 0, than the serial output begins to be the in
 It falls on the rising edfe of the clock, and rises on the falling edge of the clock. 
 What a Bi-Phase Coding might look like can be found in Figure \ref{fig:biPhaseExample}.
 \subsubsection{IR Signal \& RC 5 Code}
-\begin{figure}[H]
-    \includegraphics[width=\linewidth]{figures/placeholder.png}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
     \caption{RC 5 Code - Chunk and delay}
     \label{fig:rc5Code}
 \end{figure}
@@ -106,12 +106,12 @@ The structure and timing of RC 5 Code can be found in Figure \ref{fig:rc5Code}.
 
 \section{HDL Modules}
 \subsection{NES/SNES input decoder}
-\begin{figure}[H]
+\begin{figure}[H]\centering
 	\includegraphics[width=\linewidth]{NES_Input_Sim.png}
 	\caption{ModelSim of the NES/SNES controller decoder in NES mode.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[H]\centering
 	\includegraphics[width=\linewidth]{SNES_Input_ModelSim.png}
 	\caption{ModelSim of the NES/SNES controller decoder in SNES mode}
 \end{figure}
@@ -125,34 +125,34 @@ For this simulation, the data bits for up and left were driven low(representing 
 This module will use the system clock to drive its logic. On the first clock cycle, the data latch output will be driven high to log the controller inputs. The data latch will then be driven low, and the shift clock will be cycled seven times for the NES controller, or fifteen times for the SNES controller, with the bit corresponding to the inputs of interest recorded. Once all inputs of interest have been recorded, the readable output will be driven high, signaling all inputs are accounted for. Pressed buttons on the controllers will be signaled by a high value on the corresponding output from the decoder(up, down, left, or right). 
 
 \subsection{IR Input Decoder}
-\begin{figure}[H]
-    \includegraphics[width=\linewidth]{figures/placeholder.png}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.4\linewidth]{figures/IR_Decoder_Block.png}
     \caption{IR Top Module Diagram}
     \label{fig:irInputDecoderBlock}
 \end{figure}
-\begin{figure}[H]
-    \includegraphics[width=\linewidth]{figures/placeholder.png}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
     \caption{IR Top Module Simulation}
     \label{fig:irInputDecoderSim}
 \end{figure}
-\paragraph{Input:} TODO
-\paragraph{Output:} TODO
+\paragraph{Input:} One Serial Data stream 'Data', Clock signal.
+\paragraph{Output:} One output for each cardinal direction (Up, Down, Left, Right), and signal describing whether or not the directions are valid or not, 'Readable'.
 \paragraph{Description:} TODO
 \paragraph{Simulation:} TODO
 
 \subsubsection{IR Clock}
-\begin{figure}[H]
-    \includegraphics[width=\linewidth]{figures/placeholder.png}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
     \caption{IR Clock Slowing Block Diagram}
     \label{fig:irClockBlock}
 \end{figure}
-\begin{figure}[H]
-    \includegraphics[width=\linewidth]{figures/placeholder.png}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
     \caption{IR Clock Simulation}
     \label{fig:irClockSim}
 \end{figure}
-\begin{figure}[H]
-    \includegraphics[width=\linewidth]{figures/placeholder.png}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
     \caption{IR data received vs. 72 kHz Clock}
     \label{fig:asyncIRData}
 \end{figure}
@@ -166,13 +166,13 @@ With the 72 kHz clock, for each rising edge of this clock the IR signal will hav
 Since the IR signal is asynchronous, meaning its clock will not line up with our clock, the 72 kHz clock can check on each of its rising edges whether or not the Data input is a 0 or a 1.
 An example of what the async data vs our internal clock can be found in Figure \ref{fig:asyncIRData}.
 \subsubsection{IR Parser}
-\begin{figure}[H]
-    \includegraphics[width=\linewidth]{figures/placeholder.png}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
     \caption{IR Decoder Simulation}
     \label{fig:irParserBlock}
 \end{figure}
-\begin{figure}[H]
-    \includegraphics[width=\linewidth]{figures/placeholder.png}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
     \caption{IR Decoder Simulation}
     \label{fig:irParserSim}
 \end{figure}
@@ -194,7 +194,7 @@ An example of what the async data vs our internal clock can be found in Figure \
 \paragraph{Description:} TODO
 
 \subsection{Game Logic Controller}
-\begin{figure}[H]
+\begin{figure}[H]\centering
 	\includegraphics[width=\linewidth]{Game_Logic_ModelSim.png}
 	\caption{ModelSim of the Game Logic Controller.}
 \end{figure}
