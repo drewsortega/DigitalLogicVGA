@@ -101,7 +101,7 @@ RC5 sends data in chunks, separated by a static amount of clock cycles at 36 kHz
 \end{itemize}
 After the full chunk has been transmitted, the serial data signal is driven to 0 for 50 clock cycles before data is transmitted again.
 After the 50 clock cycles, if a button on the controller is still being pressed, the transmitter on the controller will send the same data chunk again, except the toggle bit will be 0 instead of 1.
-If after 50 cycles no data is read, there is no button being pressed or the receiver is not receiving data.
+If after 50 cycles no data is read, there is no button being pressed or the receiver is not receiving data.\cite{vishayIr}
 The structure and timing of RC 5 Code can be found in Figure \ref{fig:rc5Code}.
 
 \section{HDL Modules}
@@ -230,5 +230,10 @@ TODO
 \section{Appendix}
 TODO
 
+\begin{thebibliography}{99}
+    \bibitem{vishayIr}
+    Vishay. Data Formats for IR Remote Control. 
+    \\\texttt{https://www.vishay.com/docs/80071/dataform.pdf}
+\end{thebibliography}
 
 \end{document}
