@@ -28,7 +28,7 @@ add wave -noupdate parity
 
 
 # 5) Set some test patterns, the format is force Input value time(in ns)
-# Input 1
+# Input 1 (W key, Up)
 # Clock 1
 force Clock 1 0
 force Data 0 0
@@ -90,7 +90,7 @@ force Clock 1 1000
 
 force Clock 0 1050
 
-# Input 2
+# Input 2 (A key, Left)
 # Clock 1
 force Clock 1 1100
 force Data 0 1100
@@ -150,7 +150,7 @@ force Clock 1 2100
 
 force Clock 0 2150
 
-# Input 3
+# Input 3 (S key, Down)
 # Clock 1
 force Clock 1 2200
 force Data 0 2200
@@ -210,7 +210,7 @@ force Data 1 3200
 
 force Clock 0 3250
 
-# Input 4
+# Input 4 (D key, Right)
 # Clock 1
 force Clock 1 3300
 force Data 0 3300
