@@ -137,10 +137,11 @@ This module will use the system clock to drive its logic. On the first clock cyc
 \end{figure}
 \paragraph{Input:} One Serial Data stream 'Data', Clock signal.
 \paragraph{Output:} One output for each cardinal direction (Up, Down, Left, Right), and signal describing whether or not the directions are valid or not, 'Readable'.
-\paragraph{Description:} TODO
+\paragraph{Description:} For the IR Decoder, it was noted that its output must match the output of any other input decoder, such as the SNES/NES and PS/2.
+Because of this, the Up, Down, Left, Right, and Readable streams were required to be used for this particular module. This particular model 
 \paragraph{Simulation:} TODO
 
-\subsubsection{IR Clock}
+\subsubsection{IR Clocks}
 \begin{figure}[H]\centering
     \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
     \caption{IR Clock Slowing Block Diagram}
@@ -165,6 +166,24 @@ To account for this, we must double the resulting clock, by dividing the origina
 With the 72 kHz clock, for each rising edge of this clock the IR signal will have either a rising edge or a falling edge. 
 Since the IR signal is asynchronous, meaning its clock will not line up with our clock, the 72 kHz clock can check on each of its rising edges whether or not the Data input is a 0 or a 1.
 An example of what the async data vs our internal clock can be found in Figure \ref{fig:asyncIRData}.
+
+\subsection{IR Simplifier}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \caption{IR Simplifier Block Diagram}
+    \label{fig:irSimplifierBlock}
+\end{figure}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \caption{IR Simplifier Simulation}
+    \label{fig:irSimplifierSim}
+\end{figure}
+\paragraph{Inputs:} TODO
+\paragraph{Outputs:} TODO
+\paragraph{Simulation:} TODO
+\paragraph{Description:}
+
+
 \subsubsection{IR Parser}
 \begin{figure}[H]\centering
     \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
