@@ -4,8 +4,41 @@ module PS2_Input(
 
     output logic Up,
     output logic Down,
-    output logic Up,
+    output logic Left,
     output logic Right
 );
+
+    logic [3:0] count = 0;
+    logic [7:0] workingdata = 0;
+    logic parity = 1;
+
+    always_ff @(negedge Clock) begin
+        if (count == 10) begin
+            count <= 0;
+				parity <= 1;
+            Up <= 0;
+            Left <= 0;
+            Down <= 0;
+            Right <= 0;
+        end else begin
+            count <= count + 1;
+        end
+
+        if (count > 0 && count < 9) begin
+            workingdata[count - 1] <= Data;
+				parity <= parity ^ Data;
+        end
+
+        if (count == 9) begin
+            if (parity == Data) begin
+                case (workingdata)
+                    h11: Up <= 1;
+                    h1E: Left <= 1;
+                    h1F: Down <= 1;
+                    h20: Right <= 1;
+                endcase
+            end
+        end
+    end
 
 endmodule
