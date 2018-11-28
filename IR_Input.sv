@@ -8,7 +8,11 @@ module IR_Input (
     output logic Right,
     output logic Readable
 );
-    logic Slowed_Clock = 1'b0;
-    IR_Clock newClock(.In_Clock(Clock), .Out_Clock(Slowed_Clock));
-    IR_Parser(.Clock(Slowed_Clock), .Data(Data), .Up(Up), .Down(Down), .Left(Left), .Right(Right));
+    logic Clock_Pulse = 1'b0;
+    logic Clock_Logic = 1'b0;
+    logic Simplified_Data;
+
+    IR_Clock newClock(.In_Clock(Clock), .Out_Clock_Pulse(Clock_Pulse), .Out_Clock_Logic(Clock_Logic));
+    IR_Simplifyer simplify(Clock(Clock_Pulse), .In_Data(Data), .Out(Simplified_Data));
+    IR_Parser(.Clock(Clock_Logic), .Data(Simplified_Data), .Up(Up), .Down(Down), .Left(Left), .Right(Right));
 endmodule

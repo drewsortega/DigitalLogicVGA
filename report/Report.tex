@@ -137,7 +137,8 @@ This module will use the system clock to drive its logic. On the first clock cyc
 \end{figure}
 \paragraph{Input:} One Serial Data stream 'Data', Clock signal.
 \paragraph{Output:} One output for each cardinal direction (Up, Down, Left, Right), and signal describing whether or not the directions are valid or not, 'Readable'.
-\paragraph{Description:} TODO
+\paragraph{Description:} For the IR Decoder, it was noted that its output must match the output of any other input decoder, such as the SNES/NES and PS/2.
+Because of this, the Up, Down, Left, Right, and Readable streams were required to be used for this particular module. This particular model 
 \paragraph{Simulation:} TODO
 
 \subsubsection{IR Clock}
