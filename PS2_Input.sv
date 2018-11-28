@@ -5,7 +5,8 @@ module PS2_Input(
     output logic Up = 0,
     output logic Down = 0,
     output logic Left = 0,
-    output logic Right = 0
+    output logic Right = 0,
+    output logic Readable = 1
 );
 
     logic [3:0] count = 0;
