@@ -7,6 +7,8 @@
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage{float}
 
+\setlength{\parindent}{10ex}
+
 \title{ECE271 Final Design}
 \author{Drew Ortega, Jonathan Alexander, Cole Swanson}
 \date{\today}
@@ -42,10 +44,13 @@
 \newpage
 
 \section{Introduction}
-Some introduction Text Here
+TODO
 
 \section{Top Level Design}
-Top Level Design Text Here
+\paragraph{Inputs:} TODO
+\paragraph{Outputs:} TODO
+\paragraph{Simulation:} TODO
+\paragraph{Description:} TODO
 
 \section{Controllers}
 \subsection{NES/SNES Controller}
@@ -65,7 +70,7 @@ To communicate with the NES or SNES controllers, the host must do the following:
 \subsubsection{Self-Clocking Signal}
 \begin{figure}[H]
     \includegraphics[width=\linewidth]{figures/placeholder.png}
-    \caption{Manchester Code/Bi-Phase Coding: from Data to Output}
+    \caption{Manchester Code/Bi-Phase Coding: from Data to Output} 
     \label{fig:biPhaseExample}
 \end{figure}
 \label{subsubsec:selfClockingSignal}
@@ -130,7 +135,10 @@ This module will use the system clock to drive its logic. On the first clock cyc
     \caption{IR Top Module Simulation}
     \label{fig:irInputDecoderSim}
 \end{figure}
-Top text TODO
+\paragraph{Input:} TODO
+\paragraph{Output:} TODO
+\paragraph{Description:} TODO
+\paragraph{Simulation:} TODO
 
 \subsubsection{IR Clock}
 \begin{figure}[H]
@@ -148,7 +156,10 @@ Top text TODO
     \caption{IR data received vs. 72 kHz Clock}
     \label{fig:asyncIRData}
 \end{figure}
-The IR Input reciever takes in the BPC serial data stream and a 50MHz Clock signal. A slowed clock is generated to slow it down to approximately 72 kHz.
+\paragraph{Inputs:} TODO
+\paragraph{Outputs:} TODO
+\paragraph{Simulation:} TODO
+\paragraph{Description:} The IR Input reciever takes in the BPC serial data stream and a 50MHz Clock signal. A slowed clock is generated to slow it down to approximately 72 kHz.
 This is achieved by dividing the 50 MHz clock by 694. However, if the Clock was flipped every 694 50 MHz cycles, it would have a clock cycle of 36 kHz. 
 To account for this, we must double the resulting clock, by dividing the original clock by 347.
 With the 72 kHz clock, for each rising edge of this clock the IR signal will have either a rising edge or a falling edge. 
@@ -165,13 +176,22 @@ An example of what the async data vs our internal clock can be found in Figure \
     \caption{IR Decoder Simulation}
     \label{fig:irParserSim}
 \end{figure}
-TODO
+\paragraph{Inputs:} TODO
+\paragraph{Outputs:} TODO
+\paragraph{Simulation:} TODO
+\paragraph{Description:} TODO
 
 \subsection{PS/2 Input Decoder}
-TODO
+\paragraph{Inputs:} TODO
+\paragraph{Outputs:} TODO
+\paragraph{Simulation:} TODO
+\paragraph{Description:} TODO
 
 \subsection{Input Decoder/Multiplexer}
-TODO
+\paragraph{Inputs:} TODO
+\paragraph{Outputs:} TODO
+\paragraph{Simulation:} TODO
+\paragraph{Description:} TODO
 
 \subsection{Game Logic Controller}
 \begin{figure}[H]
@@ -185,13 +205,22 @@ Within this simulation, the initial position of the player, 0,0. The up input is
 This module will use combinational logic to determine the coordinate state of a player. The current position is stored within the module, and from the provided values of up, down, left, and right the next position is determined. An input that would result in the player going outside of the coordinate bounds(0,0 to 1,1) is ignored. Multiple inputs can be accepted at once, allowing for diagonal movement.  
 
 \subsection{Player Top Module}
-TODO
+\paragraph{Inputs:} TODO
+\paragraph{Outputs:} TODO
+\paragraph{Simulation:} TODO
+\paragraph{Description:} TODO
 
 \subsection{Pixel Counter}
-TODO
+\paragraph{Inputs:} TODO
+\paragraph{Outputs:} TODO
+\paragraph{Simulation:} TODO
+\paragraph{Description:} TODO
 
 \subsection{Renderer}
-TODO
+\paragraph{Inputs:} TODO
+\paragraph{Outputs:} TODO
+\paragraph{Simulation:} TODO
+\paragraph{Description:} TODO
 
 \section{Putting it Together}
 TODO
@@ -200,5 +229,6 @@ TODO
 TODO
 \section{Appendix}
 TODO
+
 
 \end{document}
