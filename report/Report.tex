@@ -52,6 +52,9 @@ TODO
 \paragraph{Simulation:} TODO
 \paragraph{Description:} TODO
 
+\section{Video Output}
+TODO
+
 \section{Controllers}
 \subsection{NES/SNES Controller}
 The NES and SNES controllers utilize three lines to transfer data, along with a ground and 5V power supply. Communication wit the controllers uses a data latch line, clock line and data line. The clock and data latch lines are supplied to the controller, while the data line is generated. When the latch line is driven high, the controllers log the pressed buttons within an active low shift register. The first bit of this register is automatically output on the data line. Whenever the clock input is cycled, the shift register moves along by one bit. The NES controller has eight buttons, and an eight bit shift register, while the SNES has sixteen buttons and a sixteen bit shift register. The data latch can then be cycled to obtain a new set of inputs. For this design, the up, down, left, and right inputs were of interest. Within the NES controller, the zeroth bit of the shift register corresponds to the right input, the first to  the left input, the second to the down input, and the fourth to the up input. The final four inputs were ignored. Within the SNES controller, the up input corresponds to the fifth bit in the shift register, the down input to the sixth bit, the left input to the seventh bit, and the right input to the eight bit. \\~\\
@@ -124,9 +127,9 @@ SNES: \\
 For this simulation, the data bits for up and left were driven low(representing inputs of 'left' and 'up'). The data\_latch is initially driven high. As expected, the decoder logs the up and left inputs as pressed, and continues through the inputs by providing a shift\_clock to the controller. Once the data has been cycled eight times, all values of interest are accounted for, and the readable output is driven high. After fifteen cycles of the output, the data\_latch is again driven high and readable is driven low; new inputs are ready to be read. The value of increment represents the current bit of the shift register.\\~\\
 This module will use the system clock to drive its logic. On the first clock cycle, the data latch output will be driven high to log the controller inputs. The data latch will then be driven low, and the shift clock will be cycled seven times for the NES controller, or fifteen times for the SNES controller, with the bit corresponding to the inputs of interest recorded. Once all inputs of interest have been recorded, the readable output will be driven high, signaling all inputs are accounted for. Pressed buttons on the controllers will be signaled by a high value on the corresponding output from the decoder(up, down, left, or right). 
 
-\subsection{IR Input Decoder}
+\subsection{IR Input Top Module}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.4\linewidth]{figures/IR_Decoder_Block.png}
+    \includegraphics[width=\linewidth]{figures/IR_Input_Block.jpg}
     \caption{IR Top Module Diagram}
     \label{fig:irInputDecoderBlock}
 \end{figure}
@@ -143,7 +146,7 @@ Because of this, the Up, Down, Left, Right, and Readable streams were required t
 
 \subsubsection{IR Clocks}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \includegraphics[width=0.9\linewidth]{figures/IR_Clock_Block.jpg}
     \caption{IR Clock Slowing Block Diagram}
     \label{fig:irClockBlock}
 \end{figure}
@@ -162,7 +165,7 @@ Because of this, the Up, Down, Left, Right, and Readable streams were required t
 \end{figure}
 \paragraph{Inputs:} TODOOO
 \paragraph{Outputs:} TODO
-\paragraph{Simulation:} TODO
+\paragraph{Simulation:} TODO 
 \paragraph{Description:} The IR Input reciever takes in the BPC serial data stream and a 50MHz Clock signal. A slowed clock is generated to slow it down to approximately 72 kHz.
 This is achieved by dividing the 50 MHz clock by 694. However, if the Clock was flipped every 694 50 MHz cycles, it would have a clock cycle of 36 kHz. 
 To account for this, we must double the resulting clock, by dividing the original clock by 347.
@@ -170,9 +173,9 @@ With the 72 kHz clock, for each rising edge of this clock the IR signal will hav
 Since the IR signal is asynchronous, meaning its clock will not line up with our clock, the 72 kHz clock can check on each of its rising edges whether or not the Data input is a 0 or a 1.
 An example of what the async data vs our internal clock can be found in Figure \ref{fig:asyncIRData}.
 
-\subsection{IR Simplifier}
+\subsubsection{IR Simplifier}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \includegraphics[width=0.6\linewidth]{figures/IR_Simplifier_Block.jpg}
     \caption{IR Simplifier Block Diagram}
     \label{fig:irSimplifierBlock}
 \end{figure}
@@ -189,7 +192,7 @@ An example of what the async data vs our internal clock can be found in Figure \
 
 \subsubsection{IR Parser}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \includegraphics[width=0.5\linewidth]{figures/IR_Parser_Block.jpg}
     \caption{IR Decoder Simulation}
     \label{fig:irParserBlock}
 \end{figure}
@@ -210,6 +213,16 @@ An example of what the async data vs our internal clock can be found in Figure \
 \paragraph{Description:} TODO
 
 \subsection{Input Decoder/Multiplexer}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/Input_Decoder_Block.jpg}
+    \caption{IR Decoder Simulation}
+    \label{fig:irParserBlock}
+\end{figure}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \caption{Input Decoder Simulation}
+    \label{fig:irParserSim}
+\end{figure}
 \paragraph{Inputs:} TODO
 \paragraph{Outputs:} TODO
 \paragraph{Simulation:} TODO
