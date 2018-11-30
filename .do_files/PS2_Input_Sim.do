@@ -1,7 +1,3 @@
-##################################
-# A very simple modelsim do file #
-##################################
-
 # 1) Create a library for working in
 vlib work
 
