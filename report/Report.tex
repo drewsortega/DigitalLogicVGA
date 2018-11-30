@@ -93,8 +93,8 @@ To communicate with the NES or SNES controllers, the host must do the following:
 \subsection{IR Controller}
 \subsubsection{Self-Clocking Signal}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
-    \caption{Manchester Code/Bi-Phase Coding: from Data to Output} 
+    \includegraphics[width=\linewidth]{figures/Manchester_Code.png}
+    \caption{Manchester Code/Bi-Phase Coding: from Data to Output\cite{manchesterCode}} 
     \label{fig:biPhaseExample}
 \end{figure}
 \label{subsubsec:selfClockingSignal}
@@ -110,8 +110,8 @@ It falls on the rising edfe of the clock, and rises on the falling edge of the c
 What a Bi-Phase Coding might look like can be found in Figure \ref{fig:biPhaseExample}.
 \subsubsection{IR Signal \& RC 5 Code}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
-    \caption{RC 5 Code - Chunk and delay}
+    \includegraphics[width=\linewidth]{figures/RC5_Timing.png}
+    \caption{RC 5 Code - Chunk and delay \cite{rc5Timing}}
     \label{fig:rc5Code}
 \end{figure}
 This implementation of IR reception assumes that the IR signal received will be in the form of BPC, as explained in \ref{subsubsec:selfClockingSignal}.
@@ -292,7 +292,7 @@ An example of what the async data vs our internal clock can be found in Figure \
     \label{fig:playerBlock}
 \end{figure}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \includegraphics[width=\linewidth]{figures/Player_Sim.png}
     \caption{Player Simulation}
     \label{fig:playerSim}
 \end{figure}
@@ -354,6 +354,14 @@ TODO
 
 
 \begin{thebibliography}{99}
+    \bibitem{manchesterCode} 
+    Davis, Larry. Encoding Dictionary; Manchester Encoding.
+    \\\texttt{http://www.interfacebus.com/manchester-encoding.html}
+
+    \bibitem{rc5Timing}
+    Bergmans, Sam. Philips RC-5 Protocol.
+    \\\texttt{https://www.sbprojects.net/knowledge/ir/rc5.php}
+
     \bibitem{vishayIr}
     Vishay. Data Formats for IR Remote Control. 
     \\\texttt{https://www.vishay.com/docs/80071/dataform.pdf}

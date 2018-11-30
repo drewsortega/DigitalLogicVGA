@@ -259,3 +259,4 @@ TSWLatexianTemp*
 *.sta
 
 report/Report.pdf
+node_modules
