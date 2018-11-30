@@ -62,7 +62,32 @@ This design seeks to implement a simple game, two players(differentiated by colo
     \caption{Top Level Design Block Diagram} 
     \label{fig:TopLevelDesign}
 \end{figure}
-TODO
+
+In order to handle multiple mutliple inputs for each player, several layers of modules have to be created.
+Each player should handle their own inputs for a controller, with a 2-bit choice bus defining which controller input to use.
+The player module should handle this choice and make a decision on how to read the data and what information to use.
+The player module should also take this input and alternate coordinates on a 2x2 grid. It should ensure that:
+\begin{enumerate}
+    \item Ensure a player cannot leave the grid.
+    \item Ensure a player's position cannot be driven by mutiple controllers at once.
+    \item Recognize that a NES and SNES controller may use the same port; Use Choice to determine which controller type it is.
+\end{enumerate}
+The player module should output an X coordinate and a Y coordinate for the player's position,
+and the Strobe Latch and Shift Clock that is required for the NES and SNES controllers.
+Since there are two players, each player must send its coordinate/position data to the renderer.
+The renderer decides for the 4x4 grid, What color to make each square. An empty square should
+be black, Player 1 Red, Player 2 Blue, and if they are in the same position, Purple. 
+H\_Sync and V\_Sync are outputted to VGA, as well as the per-pixel RGB values.
+More about VGA is found in Section \ref{vidoutput}.
+
+Throughout all of the design, a 50 MHz base clock is assumed.
+\paragraph{Inputs:} Two sets of inputs for each player. Each set contains a 2-bit bus 'Choice', 
+representing which controller to use. Each set also contains 3 different single bit serial inputs,
+reprsenting the input from each controller or type, for SNES/NES, PS-2, and IR. A 50 MHz base Clock is also a required input.
+\paragraph{Outputs:} Two sets of a Strobe Latch and Shift Clock are outputted, which are specific
+ to the possible SNES/NES controller input. The Design also outputs two single bit values H\_Sync and V\_Sync, representing timing specifications for VGA output.
+ It also outptus 3 4-bit busses Red, Blue, and Green that are specific to VGA.
+
 
 \section{Video Output}\
 \label{vidoutput}
@@ -82,7 +107,7 @@ This base format is followed for every resolution and framerate you could want, 
     \label{fig:vgaFrameFigure}
 \end{figure}
 Whenever both the horizontal and vertical states are during Display Time, the color pins are being driven to color the current pixel, found by checking the current pixel and line count.  Otherwise, the color pins are being driven to 0.
-
+ 
 \section{Controllers}
 \subsection{NES/SNES Controller}
 The NES and SNES controllers utilize three lines to transfer data, along with a ground and 5V power supply. Communication wit the controllers uses a data latch line, clock line and data line. The clock and data latch lines are supplied to the controller, while the data line is generated. When the latch line is driven high, the controllers log the pressed buttons within an active low shift register. The first bit of this register is automatically output on the data line. Whenever the clock input is cycled, the shift register moves along by one bit. The NES controller has eight buttons, and an eight bit shift register, while the SNES has sixteen buttons and a sixteen bit shift register. The data latch can then be cycled to obtain a new set of inputs. For this design, the up, down, left, and right inputs were of interest. Within the NES controller, the zeroth bit of the shift register corresponds to the right input, the first to  the left input, the second to the down input, and the fourth to the up input. The final four inputs were ignored. Within the SNES controller, the up input corresponds to the fifth bit in the shift register, the down input to the sixth bit, the left input to the seventh bit, and the right input to the eight bit. \\~\\
@@ -114,7 +139,9 @@ If the data to be transmitted is a 1, than the serial output is driven to mimic 
 Essentially, it rises on a rising edge of a clock, and falls on the falling edge of the clock.
 If the data to be transmitted is a 0, than the serial output begins to be the inverted signal of the clock.
 It falls on the rising edfe of the clock, and rises on the falling edge of the clock. 
+
 What a Bi-Phase Coding might look like can be found in Figure \ref{fig:biPhaseExample}.
+The left side of the figure represents what a serial data stream might look like normally, and the right shows the Bi-Phase version of the same stream.
 \subsubsection{IR Signal \& RC 5 Code}
 \begin{figure}[H]\centering
     \includegraphics[width=\linewidth]{figures/RC5_Timing.png}
