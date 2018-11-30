@@ -217,6 +217,16 @@ An example of what the async data vs our internal clock can be found in Figure \
 \paragraph{Description:} TODO
 
 \subsection{PS/2 Input Decoder}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/PS2_Input_Block.png}
+    \caption{PS/2 Input Block}
+    \label{fig:ps2InputBlock}
+\end{figure}
+\begin{figure}[H]\centering
+    \includegraphics[width=\linewidth]{figures/PS2_Input_Sim.png}
+    \caption{PS/2 Input Simulation}
+    \label{fig:ps2ParserSim}
+\end{figure}
 \paragraph{Inputs:} There are two inputs for this module, the CLK and Data signal from the PS/2 Port.
 \paragraph{Outputs:} One output for each cardinal direction (Up, Down, Left, Right), and signal describing whether or not the directions are valid or not, 'Readable'.
 \paragraph{Simulation:} This simulation feeds valid PS/2 inputs that represent the keys W, A, S, and D being pressed down, which should result in the output of Up, Left, Down, then Right.
@@ -269,12 +279,32 @@ An example of what the async data vs our internal clock can be found in Figure \
 \paragraph{Description:} TODO
 
 \subsection{Pixel Counter}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/XYCounter_Block.png}
+    \caption{Pixel Counter Block}
+    \label{fig:pixelCounterBlock}
+\end{figure}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \caption{Pixel Counter Simulation}
+    \label{fig:pixelCounterSim}
+\end{figure}
 \paragraph{Inputs:} A 50MHz clock signal.
 \paragraph{Outputs:} X and Y coordinates indicating the current pixel being drawn on the monitor, an HSync and VSync signal that is fed directly to the VGA output, and a nocolor signal indicating when the color outputs on the VGA should be brought to 0.
 \paragraph{Simulation:} In this simulation, the only input provided is that of a 50MHz clock signal.  The output is sampled for an entire second, and then the waves can be viewed to verify that the timing of all the outputs is correct.
 \paragraph{Description:} Every clock pulse, a clock enable bit is flipped, and the logic is only updated when the clock enable is 1.  There are two internal registers, xstate and ystate, which keep track of the current state in the current row and column.  It will drive nocolor to 1 when there should be no color output, and pulse HSync and VSync whenever they need to be pulsed, according to the timings for a 640 x 480 60Hz signal (described in Section \ref{vidoutput}).
 
 \subsection{Renderer}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/Renderer_Block.png}
+    \caption{Renderer Block}
+    \label{fig:rendererBlock}
+\end{figure}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \caption{Renderer Simulation}
+    \label{fig:rendererSim}
+\end{figure}
 \paragraph{Inputs:} 4 bits that indicate the x and y coordinate of both players, a nocolor signal indicating when the Renderer needs to output low for all colors as part of VGA timings, and the x and y coordinate of the current pixel being drawn by VGA.
 \paragraph{Outputs:} The Red, Green, and Blue values for the current pixel being rendered, represented as three four bit values. 
 \paragraph{Simulation:} In this simulation, it drives the x and y inputs to 4 coordinates, one in each quadrant.  For each coordinate, it drives the player locations of each player such that it tests the four possible color states for each coordinate: no players in quadrant, player 1 in quadrant, player 2 in quadrant, both players in quadrant.  Finally, it drives nocolor to 1, to test that color output is set to 0 when nocolor is 1.
