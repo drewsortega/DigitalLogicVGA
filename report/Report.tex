@@ -234,13 +234,16 @@ Pressed buttons on the controllers will be signaled by a high value on the corre
     \caption{IR Top Module Simulation}
     \label{fig:irInputDecoderSim}
 \end{figure}
-\paragraph{Inputs:} One Serial Data stream 'Data', Clock signal.
-\paragraph{Outputs:} One output for each cardinal direction (Up, Down, Left, Right), and signal describing whether or not the directions are valid or not, 'Readable'.
-\paragraph{Simulation:} TODO
+\paragraph{Input:} One Serial Data stream 'Data', Clock signal.
+\paragraph{Output:} One output for each cardinal direction (Up, Down, Left, Right), and signal describing whether or not the directions are valid or not, 'Readable'.
+\paragraph{Simulation:} For this simulation, The same bi-phase input that was used for the parser simulation is used. The data is sent as a 11-1-01101-000010.
+The correct address is received (01101), so it parses the data. A "Down" press corresponds to 000010, so the Left output is raised to HIGH and Readable becomes True since ot now has valid output.
 \paragraph{Description:} For the IR Decoder, it was noted that its output must match the output of any other input decoder, such as the SNES/NES and PS/2.
+Because of this, the Up, Down, Left, Right, and Readable streams were required to be used for this particular module. This particular model 
 Because of this, the Up, Down, Left, Right, and Readable streams were required to be used for this particular module.
 This particular module assumes that Up is 0, Down is 1, left is 2, and Right is 3. See Sections \ref{irclocks}, \ref{irsimplifier},
 and \ref{irparser} for more detailed implementation on particular parts of IR.
+
 
 \subsubsection{IR Clocks}
 \label{irclocks}
