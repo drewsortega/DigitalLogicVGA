@@ -35,7 +35,7 @@ add wave -noupdate Readable
 
 
 # 5) Set some test patterns, the format is force Input value time(in ns)
-# Input 1 (W key, Up)
+# Input 1 (Left)
 # Clock 1
 force Clock 1 0
 force Data 0 0

@@ -1,5 +1,5 @@
 module Input_Decoder (
-    input logic CLK;
+    input logic CLK,
 
     input logic[1:0] Choice,
 
@@ -19,7 +19,7 @@ module Input_Decoder (
     input logic ND,
     input logic NL,
     input logic NR,
-    input logic NReadable
+    input logic NReadable,
 
     output logic Up,
     output logic Down,
@@ -28,54 +28,51 @@ module Input_Decoder (
 );
 always_ff @(posedge CLK) 
 begin
-    case(choice)
-        
-        // PS/2
-        0: begin 
-            if(PReadable==1) begin
-                Up=PU;
-                Down=PD;
-                Left=PL,
-                Right=PR;
-            end
-            else begin
-                Up=0;
-                Down=0;
-                Left=0;
-                Right=0;
-            end
-        end 
+    if(Choice == 0) begin 
+        if(PReadable==1) begin
+            Up=PU;
+            Down=PD;
+            Left=PL;
+            Right=PR;
+        end
+        else begin
+            Up=0;
+            Down=0;
+            Left=0;
+            Right=0;
+        end
+    end 
         
         // IR
-        1: begin
-            if(IReadable==1) begin
-                Up=IU;
-                Down=ID;
-                Left=IL,
-                Right=IR;
-            end
-            else begin
-                Up=0;
-                Down=0;
-                Left=0;
-                Right=0;
-            end
+    else if(Choice == 1) begin
+        if(IReadable==1) begin
+            Up=IU;
+            Down=ID;
+            Left=IL;
+            Right=IR;
         end
+        else begin
+            Up=0;
+            Down=0;
+            Left=0;
+            Right=0;
+        end
+    end
         
         // SNES and NES
-        default: begin 
-            if(NReadable==1) begin
-                Up=NU;
-                Down=ND;
-                Left=NL,
-                Right=NR;
-            end
-            else begin
-                Up=0;
-                Down=0;
-                Left=0;
-                Right=0;
-            end
+    else begin 
+        if(NReadable==1) begin
+            Up=NU;
+            Down=ND;
+            Left=NL;
+            Right=NR;
         end
+        else begin
+            Up=0;
+            Down=0;
+            Left=0;
+            Right=0;
+        end
+    end
 end
 endmodule
