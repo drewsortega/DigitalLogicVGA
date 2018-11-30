@@ -61,7 +61,7 @@ module Player (
         .Readable(PReadable)
     );
 
-    InputDecoder inputDecoder(
+    Input_Decoder inputDecoder(
         .Clock(Clock),
         .Choice(Choice),
 
@@ -89,7 +89,7 @@ module Player (
         .Right(RightDecoded)
     );
 
-    GameLogic gameLogic(
+    Game_Logic gameLogic(
         .Up(UpDecoded),
         .Down(DownDecoded),
         .Left(LeftDecoded),

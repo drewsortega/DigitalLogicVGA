@@ -14,5 +14,5 @@ module IR_Input (
 
     IR_Clock newClock(.In_Clock(Clock), .Out_Clock_Pulse(Clock_Pulse), .Out_Clock_Logic(Clock_Logic));
     IR_Simplifier simplify(.Clock(Clock_Pulse), .In_Data(Data), .Out_Data(Simplified_Data));
-    IR_Parser(.Clock(Clock_Logic), .Data(Simplified_Data), .Up(Up), .Down(Down), .Left(Left), .Right(Right));
+    IR_Parser irparser(.Clock(Clock_Logic), .Data(Simplified_Data), .Up(Up), .Down(Down), .Left(Left), .Right(Right));
 endmodule
