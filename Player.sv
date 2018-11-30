@@ -51,15 +51,18 @@ module Player (
     );
     
     PS2_Input ps2Controller(
-        //TODO: Get PS2 Stuff
+        .Clock(Clock),
+        .Data(PS2Data),
+        
         .Up(PU), 
         .Down(PD), 
         .Left(PL), 
-        .Right(PR)
+        .Right(PR),
+        .Readable(PReadable)
     );
 
     InputDecoder inputDecoder(
-        .CLK(Clock),
+        .Clock(Clock),
         .Choice(Choice),
 
         .PU(PU),
@@ -90,7 +93,7 @@ module Player (
         .Up(UpDecoded),
         .Down(DownDecoded),
         .Left(LeftDecoded),
-        .Right(RightDecoded)
+        .Right(RightDecoded),
 
         .X(X),
         .Y(Y)
