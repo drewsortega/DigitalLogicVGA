@@ -60,16 +60,21 @@ TODO
 \section{Video Output}\
 \label{vidoutput}
 The VGA port has 5 pins that actually carry data.  There are HSync and VSync, which stand for Horizontal Sync and Vertical Sync.  When these are pulsed, they mark the end of the current line of pixels or frame.
-\begin{figure}[H]\centering
-    \includegraphics[width=0.75\linewidth]{figures/VGA_Frame_Diagram.jpg}
-    \caption{Diagram illustrating when color is output} 
-    \label{fig:vgaFrameFigure}
-\end{figure}
+The other 3 pins each represent one channel of color: red, green, and blue.  These are, at the appropriate times, driven to an analogue signal representing the strength of the color at a certain position.
 \begin{figure}[H]\centering
     \includegraphics[width=0.75\linewidth]{figures/VGA_Timing_Diagram.jpg}
-    \caption{Diagram illustrating the timing of a line and how it fits into a frame} 
+    \caption{Diagram illustrating the timing of a line and how it fits into a frame \cite{vgaTimingDiagram}} 
     \label{fig:vgaTimingFigure}
 \end{figure}
+VGA is all about timing out the HSync and VSync pulses.  There are two counts to keep track of: the current pixel, and the current line.  Every clock cycle the pixel count is incremented by one.  The pixel counts until the horizontal state resets, at which point the line count is incremented by 1.  Pixels are drawn from left to right, then top to bottom, like reading a book.
+There are four possible states the horizontal and vertical timings can be in: Display Time, Front Porch, Sync Pulse, and Back Porch.  The Display Time is when you actually drive the color output to specific values.  The pixel you're coloring can be found by consulting the current pixel and line, which serve as x and y coordinates.  The two porches surround the sync pulse, and are periods where the colors are not being driven, but the sync is not being pulsed either.  Then the Sync Pulse state is exactly as it seems, it's the time when the sync is pulsed to low.
+This base format is followed for every resolution and framerate you could want, the only thing that changes is the speed of the clock signal, and the specific times spent in each state.  In our case, we are targeting 640 x 480 60Hz, so 640 horizontal pixels, 480 vertical pixels, at 60 frames per second.
+\begin{figure}[H]\centering
+    \includegraphics[width=0.75\linewidth]{figures/VGA_Frame_Diagram.jpg}
+    \caption{Diagram illustrating when color is output \cite{vgaFrameDiagram}} 
+    \label{fig:vgaFrameFigure}
+\end{figure}
+Whenever both the horizontal and vertical states are during Display Time, the color pins are being driven to color the current pixel, found by checking the current pixel and line count.  Otherwise, the color pins are being driven to 0.
 
 \section{Controllers}
 \subsection{NES/SNES Controller}
@@ -343,8 +348,10 @@ TODO
 
 \section{Extra Implementation}
 TODO
+
 \section{Appendix}
-TODO
+\subsection{NES/SNES input decoder}
+
 
 \begin{thebibliography}{99}
     \bibitem{vishayIr}
