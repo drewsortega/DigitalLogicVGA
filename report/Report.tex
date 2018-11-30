@@ -44,13 +44,19 @@
 \newpage
 
 \section{Introduction}
-TODO
+This design project is meant to create logic capable of receiving data from three different controller inputs: SNES/NES, IR, and PS/2. Using these inputs, the design will allow for control of two separate player objects that will interact when occupying the same square in a grid. The type of input used will be determined by a two bit mode input. Communication with each controller will be handled by separate decoders, and the data from each controller will be fed into the top level module, and decoded into the desired inputs: up, down, left, and right. The inputs pressed will determine the output displayed through a VGA output, which will consist of a 2x2 grid with squares being empty or filled by a player object, signified by a change in color. The VGA counter and decoder are based on designs from the ECE272 lab course. \\~\\
+This design seeks to implement a simple game, two players(differentiated by color) in a grid that can collide with each other. The inputs for each player are handled separately, and ??as a result the input for either player can differ from the other. Specific inputs from each type of controller are mapped to the up, down, left, and right movements, and pressing those buttons, or a combination of them, will result in movement of the player object. If both players are in the same square, the color of that square will be a combination of the two player's colors. 
+
+
 
 \section{Top Level Design}
 \paragraph{Inputs:} TODO
 \paragraph{Outputs:} TODO
 \paragraph{Simulation:} TODO
 \paragraph{Description:} TODO
+
+\section{Video Output}
+TODO
 
 \section{Controllers}
 \subsection{NES/SNES Controller}
@@ -107,12 +113,16 @@ The structure and timing of RC 5 Code can be found in Figure \ref{fig:rc5Code}.
 \section{HDL Modules}
 \subsection{NES/SNES input decoder}
 \begin{figure}[H]\centering
-	\includegraphics[width=\linewidth]{NES_Input_Sim.png}
+	\includegraphics[width=\linewidth]{figures/SNES_Input_Diagram}
+	\caption{Block Diagram of the NES/SNES input decoder}
+\end{figure}
+\begin{figure}[H]\centering
+	\includegraphics[width=\linewidth]{figures/NES_Input_Sim.png}
 	\caption{ModelSim of the NES/SNES controller decoder in NES mode.}
 \end{figure}
 
 \begin{figure}[H]\centering
-	\includegraphics[width=\linewidth]{SNES_Input_ModelSim.png}
+	\includegraphics[width=\linewidth]{figures/SNES_Input_ModelSim.png}
 	\caption{ModelSim of the NES/SNES controller decoder in SNES mode}
 \end{figure}
 Inputs: One bit data representing the current bit from the controller shift register, one bit clock, and two bit mode used to determine which controller is in use(NES or SNES)\\~\\
@@ -124,9 +134,9 @@ SNES: \\
 For this simulation, the data bits for up and left were driven low(representing inputs of 'left' and 'up'). The data\_latch is initially driven high. As expected, the decoder logs the up and left inputs as pressed, and continues through the inputs by providing a shift\_clock to the controller. Once the data has been cycled eight times, all values of interest are accounted for, and the readable output is driven high. After fifteen cycles of the output, the data\_latch is again driven high and readable is driven low; new inputs are ready to be read. The value of increment represents the current bit of the shift register.\\~\\
 This module will use the system clock to drive its logic. On the first clock cycle, the data latch output will be driven high to log the controller inputs. The data latch will then be driven low, and the shift clock will be cycled seven times for the NES controller, or fifteen times for the SNES controller, with the bit corresponding to the inputs of interest recorded. Once all inputs of interest have been recorded, the readable output will be driven high, signaling all inputs are accounted for. Pressed buttons on the controllers will be signaled by a high value on the corresponding output from the decoder(up, down, left, or right). 
 
-\subsection{IR Input Decoder}
+\subsection{IR Input Top Module}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.4\linewidth]{figures/IR_Decoder_Block.png}
+    \includegraphics[width=\linewidth]{figures/IR_Input_Block.jpg}
     \caption{IR Top Module Diagram}
     \label{fig:irInputDecoderBlock}
 \end{figure}
@@ -143,7 +153,7 @@ Because of this, the Up, Down, Left, Right, and Readable streams were required t
 
 \subsubsection{IR Clocks}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \includegraphics[width=0.9\linewidth]{figures/IR_Clock_Block.jpg}
     \caption{IR Clock Slowing Block Diagram}
     \label{fig:irClockBlock}
 \end{figure}
@@ -153,13 +163,20 @@ Because of this, the Up, Down, Left, Right, and Readable streams were required t
     \label{fig:irClockSim}
 \end{figure}
 \begin{figure}[H]\centering
+<<<<<<< HEAD
     \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+=======
+    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim1}
+    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim2}
+    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim3}
+    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim4}
+>>>>>>> 3fe74c3ac467c84e3f3b7c2c7e4ee926d27ddd68
     \caption{IR data received vs. 72 kHz Clock}
     \label{fig:asyncIRData}
 \end{figure}
 \paragraph{Inputs:} TODO
 \paragraph{Outputs:} TODO
-\paragraph{Simulation:} TODO
+\paragraph{Simulation:} TODO 
 \paragraph{Description:} The IR Input reciever takes in the BPC serial data stream and a 50MHz Clock signal. A slowed clock is generated to slow it down to approximately 72 kHz.
 This is achieved by dividing the 50 MHz clock by 694. However, if the Clock was flipped every 694 50 MHz cycles, it would have a clock cycle of 36 kHz. 
 To account for this, we must double the resulting clock, by dividing the original clock by 347.
@@ -167,9 +184,9 @@ With the 72 kHz clock, for each rising edge of this clock the IR signal will hav
 Since the IR signal is asynchronous, meaning its clock will not line up with our clock, the 72 kHz clock can check on each of its rising edges whether or not the Data input is a 0 or a 1.
 An example of what the async data vs our internal clock can be found in Figure \ref{fig:asyncIRData}.
 
-\subsection{IR Simplifier}
+\subsubsection{IR Simplifier}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \includegraphics[width=0.6\linewidth]{figures/IR_Simplifier_Block.jpg}
     \caption{IR Simplifier Block Diagram}
     \label{fig:irSimplifierBlock}
 \end{figure}
@@ -186,7 +203,7 @@ An example of what the async data vs our internal clock can be found in Figure \
 
 \subsubsection{IR Parser}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \includegraphics[width=0.5\linewidth]{figures/IR_Parser_Block.jpg}
     \caption{IR Decoder Simulation}
     \label{fig:irParserBlock}
 \end{figure}
@@ -207,6 +224,16 @@ An example of what the async data vs our internal clock can be found in Figure \
 \paragraph{Description:} TODO
 
 \subsection{Input Decoder/Multiplexer}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/Input_Decoder_Block.jpg}
+    \caption{IR Decoder Simulation}
+    \label{fig:irParserBlock}
+\end{figure}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \caption{Input Decoder Simulation}
+    \label{fig:irParserSim}
+\end{figure}
 \paragraph{Inputs:} TODO
 \paragraph{Outputs:} TODO
 \paragraph{Simulation:} TODO
@@ -214,7 +241,11 @@ An example of what the async data vs our internal clock can be found in Figure \
 
 \subsection{Game Logic Controller}
 \begin{figure}[H]\centering
-	\includegraphics[width=\linewidth]{Game_Logic_ModelSim.png}
+	\includegraphics[width=\linewidth]{figures/Game_Logic_Diagram}
+	\caption{Block Diagram of the Game Logic Controller}
+\end{figure}
+\begin{figure}[H]\centering
+	\includegraphics[width=\linewidth]{figures/Game_Logic_ModelSim.png}
 	\caption{ModelSim of the Game Logic Controller.}
 \end{figure}
 Inputs: One bit inputs for up, down, left, and right\\~\\
@@ -224,6 +255,16 @@ Within this simulation, the initial position of the player, 0,0. The up input is
 This module will use combinational logic to determine the coordinate state of a player. The current position is stored within the module, and from the provided values of up, down, left, and right the next position is determined. An input that would result in the player going outside of the coordinate bounds(0,0 to 1,1) is ignored. Multiple inputs can be accepted at once, allowing for diagonal movement.  
 
 \subsection{Player Top Module}
+\begin{figure}[H]\centering
+    \includegraphics[width=\linewidth]{figures/Player_Block.jpg}
+    \caption{Player Simulation}
+    \label{fig:irParserBlock}
+\end{figure}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \caption{Player Simulation}
+    \label{fig:irParserSim}
+\end{figure}
 \paragraph{Inputs:} TODO
 \paragraph{Outputs:} TODO
 \paragraph{Simulation:} TODO
