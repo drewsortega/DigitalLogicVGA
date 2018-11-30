@@ -62,7 +62,7 @@ module Player (
     );
 
     InputDecoder inputDecoder(
-        .CLK(Clock),
+        .Clock(Clock),
         .Choice(Choice),
 
         .PU(PU),

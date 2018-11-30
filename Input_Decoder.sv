@@ -1,5 +1,5 @@
 module Input_Decoder (
-    input logic CLK,
+    input logic Clock,
 
     input logic[1:0] Choice,
 
@@ -26,7 +26,7 @@ module Input_Decoder (
     output logic Left,
     output logic Right
 );
-always_ff @(posedge CLK) 
+always_ff @(posedge Clock) 
 begin
     if(Choice == 0) begin 
         if(PReadable==1) begin
