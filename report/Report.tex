@@ -244,11 +244,10 @@ An example of what the async data vs our internal clock can be found in Figure \
 	\includegraphics[width=\linewidth]{figures/Game_Logic_ModelSim.png}
 	\caption{ModelSim of the Game Logic Controller.}
 \end{figure}
-Inputs: One bit inputs for up, down, left, and right\\~\\
-Outputs: One bit data inputs for X and Y, representing the position of the player object within the four by four grid where 0,0 is the lower left corner \\~\\
-Simulation: \\~\\
-Within this simulation, the initial position of the player, 0,0. The up input is driven high, and as expected the coordinate output for Y also changes to high. Next, a right input is provided, and again the coordinates change such that X is high. After this, down is driven high and then left is driven high, resulting in the coordinates shifting to 0,1 then 0,0. Finally, both up and right are driven high, resulting in a coordinate of 1,1.\\~\\
-This module will use combinational logic to determine the coordinate state of a player. The current position is stored within the module, and from the provided values of up, down, left, and right the next position is determined. An input that would result in the player going outside of the coordinate bounds(0,0 to 1,1) is ignored. Multiple inputs can be accepted at once, allowing for diagonal movement.  
+\paragraph{Inputs:} One bit inputs for up, down, left, and right
+\paragraph{Outputs:} One bit data inputs for X and Y, representing the position of the player object within the four by four grid where 0,0 is the lower left corner.
+\paragraph{Simulation:} Within this simulation, the initial position of the player, 0,0. The up input is driven high, and as expected the coordinate output for Y also changes to high. Next, a right input is provided, and again the coordinates change such that X is high. After this, down is driven high and then left is driven high, resulting in the coordinates shifting to 0,1 then 0,0. Finally, both up and right are driven high, resulting in a coordinate of 1,1.
+\paragraph{Description:} This module will use combinational logic to determine the coordinate state of a player. The current position is stored within the module, and from the provided values of up, down, left, and right the next position is determined. An input that would result in the player going outside of the coordinate bounds(0,0 to 1,1) is ignored. Multiple inputs can be accepted at once, allowing for diagonal movement.
 
 \subsection{Player Top Module}
 \begin{figure}[H]\centering
@@ -267,15 +266,14 @@ This module will use combinational logic to determine the coordinate state of a 
 \paragraph{Description:} TODO
 
 \subsection{Pixel Counter}
-Inputs: A 50MHz clock signal. \\~\\
-Outputs: X and Y coordinates indicating the current pixel being drawn on the monitor, an HSync and VSync signal that is fed directly to the VGA output, and a nocolor signal indicating when the color outputs on the VGA should be brought to 0. \\~\\
-Simulation: \\~\\
-In this simulation, the only input provided is that of a 50MHz clock signal.  The output is sampled for an entire second, and then the waves can be viewed to verify that the timing of all the outputs is correct. \\~\\
-TODO
+\paragraph{Inputs:} A 50MHz clock signal.
+\paragraph{Outputs:} X and Y coordinates indicating the current pixel being drawn on the monitor, an HSync and VSync signal that is fed directly to the VGA output, and a nocolor signal indicating when the color outputs on the VGA should be brought to 0.
+\paragraph{Simulation:} In this simulation, the only input provided is that of a 50MHz clock signal.  The output is sampled for an entire second, and then the waves can be viewed to verify that the timing of all the outputs is correct.
+\paragraph{Description:} Every clock pulse, a clock enable bit is flipped, and the logic is only updated when the clock enable is 1.
 
 \subsection{Renderer}
-Inputs: 4 bits that indicate the x and y coordinate of both players, a nocolor signal indicating when the Renderer needs to output low for all colors as part of VGA timings, and the x and y coordinate of the current pixel being drawn by VGA. \\~\\
-Outputs: 
+\paragraph{Inputs:} 4 bits that indicate the x and y coordinate of both players, a nocolor signal indicating when the Renderer needs to output low for all colors as part of VGA timings, and the x and y coordinate of the current pixel being drawn by VGA.
+\paragraph{Outputs:} The Red, Green, and Blue values for the current pixel being rendered, represented as three four bit values. 
 \paragraph{Simulation:} TODO
 \paragraph{Description:} TODO
 
