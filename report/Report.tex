@@ -6,6 +6,13 @@
 \usepackage{graphicx}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage{float}
+\usepackage{listings}
+
+\lstset{
+    numbers=left,
+    tabsize=4,
+    breaklines=true,
+}
 
 \setlength{\parindent}{10ex}
 
@@ -350,8 +357,52 @@ TODO
 TODO
 
 \section{Appendix}
-\subsection{NES/SNES input decoder}
-
+\subsection{Source Code}
+\subsubsection{NES/SNES Input Decoder}
+\lstinputlisting{../SNES_Input.sv}
+\subsubsection{IR Input Top Module}
+\lstinputlisting{../IR_Input.sv}
+\subsubsection{IR Clocks}
+\lstinputlisting{../IR_Clock.sv}
+\subsubsection{IR Simplifier}
+\lstinputlisting{../IR_Simplifier.sv}
+\subsubsection{IR Parser}
+\lstinputlisting{../IR_Parser.sv}
+\subsubsection{PS/2 Input Decoder}
+\lstinputlisting{../PS2_Input.sv}
+\subsubsection{Input Decoder/Multiplexer}
+\lstinputlisting{../Input_Decoder.sv}
+\subsubsection{Game Logic Controller}
+\lstinputlisting{../Game_Logic.sv}
+\subsubsection{Player Top Module}
+\lstinputlisting{../Player.sv}
+\subsubsection{Pixel Counter}
+\lstinputlisting{../XYCounter.sv}
+\subsubsection{Renderer}
+\lstinputlisting{../Renderer.sv}
+\subsection{Do Files}
+\subsubsection{NES/SNES Input Decoder}
+\lstinputlisting{../.do_files/SNES_Input_Sim.do}
+\subsubsection{IR Input Top Module}
+\lstinputlisting{../.do_files/IR_Input_Sim.do}
+\subsubsection{IR Clocks}
+\lstinputlisting{../.do_files/IR_Clock.do}
+\subsubsection{IR Simplifier}
+\lstinputlisting{../.do_files/IR_Simplifier_Sim.do}
+\subsubsection{IR Parser}
+\lstinputlisting{../.do_files/IR_Parser_Sim.do}
+\subsubsection{PS/2 Input Decoder}
+\lstinputlisting{../.do_files/PS2_Input_Sim.do}
+\subsubsection{Input Decoder/Multiplexer}
+\lstinputlisting{../.do_files/Input_Decoder_Sim.do}
+\subsubsection{Game Logic Controller}
+\lstinputlisting{../.do_files/Game_Logic_Sim.do}
+\subsubsection{Player Top Module}
+\lstinputlisting{../.do_files/Player_Sim.do}
+\subsubsection{Pixel Counter}
+\lstinputlisting{../.do_files/XYCounter_Sim.do}
+\subsubsection{Renderer}
+\lstinputlisting{../.do_files/Renderer_Sim.do}
 
 \begin{thebibliography}{99}
     \bibitem{manchesterCode} 
@@ -365,9 +416,11 @@ TODO
     \bibitem{vishayIr}
     Vishay. Data Formats for IR Remote Control. 
     \\\texttt{https://www.vishay.com/docs/80071/dataform.pdf}
+    
     \bibitem{vgaFrameDiagram}
     Image. Eric Eastwood. StackOverflow.  VGA Decoding - Dealing with tolerances
     \\\texttt{https://electronics.stackexchange.com/questions/92900/vga-decoding-dealing-with-tolerances}
+    
     \bibitem{vgaTimingDiagram}
     Image. Thomas Crosley. Stack Overflow.  How exactly does a VGA cable work?
     \\\texttt{https://electronics.stackexchange.com/questions/166681/how-exactly-does-a-vga-cable-work}
