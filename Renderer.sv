@@ -1,4 +1,4 @@
-module Drawing(
+module Renderer(
 	input logic [9:0] ycoord,
 	input logic [9:0] xcoord,
 	input logic [0:0] nocolor,

@@ -153,14 +153,11 @@ Because of this, the Up, Down, Left, Right, and Readable streams were required t
     \label{fig:irClockSim}
 \end{figure}
 \begin{figure}[H]\centering
-    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim1.png}
-    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim2.png}
-    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim3.png}
-    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim4.png}
+    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
     \caption{IR data received vs. 72 kHz Clock}
     \label{fig:asyncIRData}
 \end{figure}
-\paragraph{Inputs:} TODOOO
+\paragraph{Inputs:} TODO
 \paragraph{Outputs:} TODO
 \paragraph{Simulation:} TODO
 \paragraph{Description:} The IR Input reciever takes in the BPC serial data stream and a 50MHz Clock signal. A slowed clock is generated to slow it down to approximately 72 kHz.
@@ -233,14 +230,15 @@ This module will use combinational logic to determine the coordinate state of a 
 \paragraph{Description:} TODO
 
 \subsection{Pixel Counter}
-\paragraph{Inputs:} TODO
-\paragraph{Outputs:} TODO
-\paragraph{Simulation:} TODO
-\paragraph{Description:} TODO
+Inputs: A 50MHz clock signal. \\~\\
+Outputs: X and Y coordinates indicating the current pixel being drawn on the monitor, an HSync and VSync signal that is fed directly to the VGA output, and a nocolor signal indicating when the color outputs on the VGA should be brought to 0. \\~\\
+Simulation: \\~\\
+In this simulation, the only input provided is that of a 50MHz clock signal.  The output is sampled for an entire second, and then the waves can be viewed to verify that the timing of all the outputs is correct. \\~\\
+TODO
 
 \subsection{Renderer}
-\paragraph{Inputs:} TODO
-\paragraph{Outputs:} TODO
+Inputs: 4 bits that indicate the x and y coordinate of both players, a nocolor signal indicating when the Renderer needs to output low for all colors as part of VGA timings, and the x and y coordinate of the current pixel being drawn by VGA. \\~\\
+Outputs: 
 \paragraph{Simulation:} TODO
 \paragraph{Description:} TODO
 
