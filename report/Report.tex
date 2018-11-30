@@ -59,7 +59,17 @@ TODO
 
 \section{Video Output}\
 \label{vidoutput}
-TODO
+The VGA port has 5 pins that actually carry data.  There are HSync and VSync, which stand for Horizontal Sync and Vertical Sync.  When these are pulsed, they mark the end of the current line of pixels or frame.
+\begin{figure}[H]\centering
+    \includegraphics[width=0.75\linewidth]{figures/VGA_Frame_Diagram.jpg}
+    \caption{Diagram illustrating when color is output} 
+    \label{fig:vgaFrameFigure}
+\end{figure}
+\begin{figure}[H]\centering
+    \includegraphics[width=0.75\linewidth]{figures/VGA_Timing_Diagram.jpg}
+    \caption{Diagram illustrating the timing of a line and how it fits into a frame} 
+    \label{fig:vgaTimingFigure}
+\end{figure}
 
 \section{Controllers}
 \subsection{NES/SNES Controller}
@@ -340,6 +350,12 @@ TODO
     \bibitem{vishayIr}
     Vishay. Data Formats for IR Remote Control. 
     \\\texttt{https://www.vishay.com/docs/80071/dataform.pdf}
+    \bibitem{vgaFrameDiagram}
+    Image. Eric Eastwood. StackOverflow.  VGA Decoding - Dealing with tolerances
+    \\\texttt{https://electronics.stackexchange.com/questions/92900/vga-decoding-dealing-with-tolerances}
+    \bibitem{vgaTimingDiagram}
+    Image. Thomas Crosley. Stack Overflow.  How exactly does a VGA cable work?
+    \\\texttt{https://electronics.stackexchange.com/questions/166681/how-exactly-does-a-vga-cable-work}
 \end{thebibliography}
 
 \end{document}
