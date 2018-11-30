@@ -148,9 +148,10 @@ The left side of the figure represents what a serial data stream might look like
     \caption{RC 5 Code - Chunk and delay \cite{rc5Timing}}
     \label{fig:rc5Code}
 \end{figure}
-This implementation of IR reception assumes that the IR signal received will be in the form of BPC, as explained in \ref{subsubsec:selfClockingSignal}.
-There are several standards for IR data transmission. The that is decoded for this design is the RC 5 Code (RC5).
-RC5 sends data in chunks, separated by a static amount of clock cycles at 36 kHz. Each chunk is has four sections, totalling to 14 bits.
+This implementation of IR reception assumes that the IR signal received will be in the form of  Manchester Code, as explained in \ref{subsubsec:selfClockingSignal}.
+There are several standards for IR data transmission. The one assumed to be used for our IR controller is RC-5. RC-5 sends 32 bursts at a frequency of 36 kHz for each time the Manchester Data should be 1, and does not send any data at any other time.
+This means that the period of the actual Manchester code is 1.125 kHz/1125 Hz. 
+The actual sent Bi-Phase/Manchester code has a certain specification as well. The first two bits sent will always be 1, which helps the receiver gauge timing. Each section of the expected input is as follows:
 \begin{itemize}
     \item[-] Section 1 - Start Bits (2 bits): Help orient the reciever to understand source clock timing.
     \item[-] Section 2 - Toggle Bit (1 bit): Defines whether or not this chunk is a new key press or a held key already transmitted.
@@ -213,7 +214,7 @@ This module will use the system clock to drive its logic. On the first clock cyc
 \paragraph{Output:} One output for each cardinal direction (Up, Down, Left, Right), and signal describing whether or not the directions are valid or not, 'Readable'.
 \paragraph{Description:} For the IR Decoder, it was noted that its output must match the output of any other input decoder, such as the SNES/NES and PS/2.
 Because of this, the Up, Down, Left, Right, and Readable streams were required to be used for this particular module. This particular model 
-\paragraph{Simulation:} TODO
+\paragraph{Simulation:} 
 
 \subsubsection{IR Clocks}
 \begin{figure}[H]\centering
@@ -230,8 +231,8 @@ Because of this, the Up, Down, Left, Right, and Readable streams were required t
     \label{fig:asyncIRData}
 \end{figure}
 \paragraph{Inputs:} Takes in a single 50 MHz Clock.
-\paragraph{Outputs:} Outputs a 
-\paragraph{Simulation:} TODO 
+\paragraph{Outputs:} Outputs a 144 kHz clock for evaluating pulse simplification, and a 2.25 kHz Clock for evaluating manchester code values.
+\paragraph{Simulation:} In this simulation, a 50 MHz clock was inputted. If one were to count the amount of ticks that were waited, there 174 ticks between the original clock and the Pulse clock. There are 64 ticks between the logic clock and the pulse clock. This is the expected amount. 
 \paragraph{Description:} The IR Input reciever takes in the BPC serial data stream and a 50MHz Clock signal. A slowed clock is generated to slow it down to approximately 72 kHz.
 This is achieved by dividing the 50 MHz clock by 694. However, if the Clock was flipped every 694 50 MHz cycles, it would have a clock cycle of 36 kHz. 
 To account for this, we must double the resulting clock, by dividing the original clock by 347.
@@ -251,10 +252,11 @@ An example of what the async data vs our internal clock can be found in Figure \
     \caption{IR Simplifier Simulation}
     \label{fig:irSimplifierSim}
 \end{figure}
-\paragraph{Inputs:} TODO
-\paragraph{Outputs:} TODO
-\paragraph{Simulation:} TODO
-\paragraph{Description:}
+\paragraph{Inputs:} The IR Simplifier takes in the 144 kHz Pulse evaluation clock and the raw data pulses from an IR sensor. 
+\paragraph{Outputs:} A simplified data stream is outputted, as if the raw data did not pulse on HIGH.
+\paragraph{Simulation:} For this simulation, Only two raw data clock pulses were used. While not pulsing, the data was held at LOW, although realistically it would remain at X since no physical data is coming in. However, if it were at X, it would still work since it is only checked if the value is HIGH. No other pulses were used since any further pulses would have been ignored.
+As can be see from the results of this simulation, Receiving the HIGH pulse made the simplified data output held HIGH for 32 ticks at 32 kHz, or 128 ticks at our faster 144 kHz.
+\paragraph{Description:} The rising edge of a clock occurs frequently enough that an average of two rising edges occurs on each pulse. As soon as a HIGH value is read, the rest of the input values are ignored and 32 ticks at 32 kHz are waited for. During this time, the simplified output is held at HIGH under the assumption that the IR data is still high. The parser should account for this as it is possible to be corrupted.
 
 
 \subsubsection{IR Parser}
@@ -268,11 +270,12 @@ An example of what the async data vs our internal clock can be found in Figure \
     \caption{IR Decoder Simulation}
     \label{fig:irParserSim}
 \end{figure}
-\paragraph{Inputs:} TODO
-\paragraph{Outputs:} TODO
-\paragraph{Simulation:} TODO
-\paragraph{Description:} TODO
-
+\paragraph{Inputs:} The IR parser takes in a 2.25 kHz clock and a simplified Data stream in manchester encoding, following RC-5 specification.
+\paragraph{Outputs:} The parser outputs Up, Down, Left, Right, to correspond which button was being pressed on this key press. It also outptus readable, specifying whether or not the output data is currently valid.
+\paragraph{Description:} The IR parser's job is to have a rising edge for each falling and rising edge of the RC-5 code. Because of this, the IR data can come in at an asynchronous pace not ligning up with its own clock, and it will still read data correctly. 
+The start bits help the parser decide when to actually start parsing and when it is at rest. It then reads in the toggle bit which is not used for this design project. It then reads the address, which is  hard coded for this project to be 01101. If the read address matches the internal address, it considers the following 6 data bits to be valid.
+Only 4 possibilities of the 6 data bits are actually used. Values 000000-000010 represent all directions, and any other values are considered other button presses and do not affect the output.
+\paragraph{Simulation:} For the IR parser simulation, The button "Down" was simulated. the manchester stream read in 11-1-01101-000010. The given address matched so it continued on. The value given, 000010, was hard coded to represent a Down key press. As can be seen from the simulation, the output is not changed until this keypress was completed.
 \subsection{PS/2 Input Decoder}
 \begin{figure}[H]\centering
     \includegraphics[width=0.5\linewidth]{figures/PS2_Input_Block.png}
@@ -296,15 +299,14 @@ An example of what the async data vs our internal clock can be found in Figure \
     \label{fig:inputDecoderBlock}
 \end{figure}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/Input_Decoder_Sim.png}
+    \includegraphics[width=\linewidth]{figures/Input_Decoder_Sim.png}
     \caption{Input Decoder Simulation}
-    \label{fig:inputDecoderSum}
+    \label{fig:inputDecoderSim}
 \end{figure}
-\paragraph{Inputs:} TODO
-\paragraph{Outputs:} TODO
-\paragraph{Simulation:} TODO
-\paragraph{Description:} TODO
-
+\paragraph{Inputs:} There are 17 inputs for this module. 5 come from each controller, represnting their Up, Down, Left, Right and Readable. One input is the Choice, deciding which controller to use. Finally, a clock is inputted.
+\paragraph{Outputs:} The Input Decoder outputs a Up, Down, Left, and Right, which are the value passed through from the controller themselves.
+\paragraph{Simulation:} For this simuation, each of the controllers are tested. PS/2 is tested first, where it sends up and down while not readable, and up and down while readable. The same outputs are tried for both IR and SNES/NES, where all inputs are only readable half of the time. The simulation also shows that some values are driven to 1 from another controller, but are ignored since only one controller can be chosen at once.
+\paragraph{Description:} The input decoder's job is to use the "Choice" bus as well as the "Readable" values for each controller to decide which values to give to the game logic. A 0 corresponds to PS/2, a 1 corresponds to IR, and a 2 or 3 correspond to SNES and NES, respectively. If the chosen controller is Readable, their values are passed through. if not, the values are driven to 0.
 \subsection{Game Logic Controller}
 \begin{figure}[H]\centering
 	\includegraphics[width=\linewidth]{figures/Game_Logic_Diagram}
@@ -330,10 +332,10 @@ An example of what the async data vs our internal clock can be found in Figure \
     \caption{Player Simulation}
     \label{fig:playerSim}
 \end{figure}
-\paragraph{Inputs:} TODO
-\paragraph{Outputs:} TODO
-\paragraph{Simulation:} TODO
-\paragraph{Description:} TODO
+\paragraph{Inputs:} The player module takes in 3 1-bit values reprsenting the serial input for all three controllers, a 2-bit Choice of which controller, and a 50 MHz Clock signal.
+\paragraph{Outputs:} The Player module outputs an X and a Y bit reprsenting its position in the 2x2 grid.
+\paragraph{Simulation:} The simulation of the Player module takes in an example data stream for the SNES. after reading in several clock cycles of values, it is decided to move the Y coordinate up to 1 since the keypress was Up.
+\paragraph{Description:} The Player's job is to take in all inputs from all possible controllers, pick the one to be used. It then handles any game logic for its position, such as running of screen based on controller input of Up, Down, Left, and Right. It then outputs its dynamic coordinate data.
 
 \subsection{Pixel Counter}
 \begin{figure}[H]\centering
