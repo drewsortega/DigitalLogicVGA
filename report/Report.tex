@@ -7,7 +7,10 @@
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage{float}
 \usepackage{listings}
+\usepackage{etoolbox}
 
+\patchcmd{\thebibliography}{\section*}{\section}{}{}
+ 
 \lstset{
     numbers=left,
     tabsize=4,
@@ -176,6 +179,7 @@ There is a standard for what each bit in the 11 bit sequence represents.  The se
 The 8 data bits are a unique number that represents a specific key being pressed, or unpressed.  The parity bit is a bit representing how many 1s there are in the data bit.  It functions as a quick and simple error check, if the parity bit does not match the data then you know the data was corrupted somehow.
 
 \section{HDL Modules}
+\label{hdlModules}
 \subsection{NES/SNES input decoder}
 \begin{figure}[H]\centering
 	\includegraphics[width=\linewidth]{figures/SNES_Input_Diagram}
@@ -380,13 +384,14 @@ Only 4 possibilities of the 6 data bits are actually used. Values 000000-000010 
 \paragraph{Description:} If the nocolor input is 1, all color outputs are driven to 0.  Next, it will immediately drive green to 0 as it's not used in our display.  Next, it will check what quadrant of the screen the current pixel being drawn is in, and what players are located in that quadrant.  If player 1 is in the quadrant, red is driven to full color, otherwise it's driven to 0.  Same for player 2 and blue.
 
 \section{Putting it Together}
+Creating the top module consisted of putting all of the modules specified in Section \ref{hdlModules} together. The top-most modules that the top module interfaces directly with are the Player, Pixel Counter, and Renderer. All that is needed is 3 single bit inputs for each player for each controller, a choice of controller for each player, and a 50 MHz clock. The resulting simulation can be found in Figure \ref{fig:topSim}.
 \begin{figure}[H]\centering
     \includegraphics[width=\linewidth]{figures/Top_Sim.png}
     \caption{Top Level Simulation}
     \label{fig:topSim}
 \end{figure}
-TODO
-
+The resulting image shows the position and pixel colors changing based on the clock. Since there are many inputs and outputs, a small section of time is show in the figure. However, an extended diagram would show the continuation of a full frame and a re render of the bottom left location, changing its color from purple.
+An issue with this simulation is that controller inputs happen to fast- an actual player could not press buttons at any rate specified by our given clocks.
 \section{Extra Implementation}
 TODO
 
