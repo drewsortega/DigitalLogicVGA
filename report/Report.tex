@@ -351,6 +351,11 @@ An example of what the async data vs our internal clock can be found in Figure \
 \paragraph{Description:} If the nocolor input is 1, all color outputs are driven to 0.  Next, it will immediately drive green to 0 as it's not used in our display.  Next, it will check what quadrant of the screen the current pixel being drawn is in, and what players are located in that quadrant.  If player 1 is in the quadrant, red is driven to full color, otherwise it's driven to 0.  Same for player 2 and blue.
 
 \section{Putting it Together}
+\begin{figure}[H]\centering
+    \includegraphics[width=\linewidth]{figures/Top_Sim.png}
+    \caption{Top Level Simulation}
+    \label{fig:topSim}
+\end{figure}
 TODO
 
 \section{Extra Implementation}
@@ -426,4 +431,4 @@ TODO
     \\\texttt{https://electronics.stackexchange.com/questions/166681/how-exactly-does-a-vga-cable-work}
 \end{thebibliography}
 
-\end{document}
+\end{document} 
