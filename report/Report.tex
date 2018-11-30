@@ -54,8 +54,16 @@
 \newpage
 
 \section{Introduction}
-This design project is meant to create logic capable of receiving data from three different controller inputs: SNES/NES, IR, and PS/2. Using these inputs, the design will allow for control of two separate player objects that will interact when occupying the same square in a grid. The type of input used will be determined by a two bit mode input. Communication with each controller will be handled by separate decoders, and the data from each controller will be fed into the top level module, and decoded into the desired inputs: up, down, left, and right. The inputs pressed will determine the output displayed through a VGA output, which will consist of a 2x2 grid with squares being empty or filled by a player object, signified by a change in color. The VGA counter and decoder are based on designs from the ECE272 lab course. \\~\\
-This design seeks to implement a simple game, two players(differentiated by color) in a grid that can collide with each other. The inputs for each player are handled separately, and ??as a result the input for either player can differ from the other. Specific inputs from each type of controller are mapped to the up, down, left, and right movements, and pressing those buttons, or a combination of them, will result in movement of the player object. If both players are in the same square, the color of that square will be a combination of the two player's colors. 
+This design project is meant to create logic capable of receiving data from three different controller inputs: SNES/NES, IR, and PS/2.
+Using these inputs, the design will allow for control of two separate player objects that will interact when occupying the same square in a grid.
+The type of input used will be determined by a two bit mode input.
+Communication with each controller will be handled by separate decoders, and the data from each controller will be fed into the top level module, and decoded into the desired inputs: up, down, left, and right.
+The inputs pressed will determine the output displayed through a VGA output, which will consist of a 2x2 grid with squares being empty or filled by a player object, signified by a change in color.
+The VGA counter and decoder are based on designs from the ECE272 lab course. \\~\\
+This design seeks to implement a simple game, two players(differentiated by color) in a grid that can collide with each other.
+The inputs for each player are handled separately, and as a result the input for either player can differ from the other.
+Specific inputs from each type of controller are mapped to the up, down, left, and right movements, and pressing those buttons, or a combination of them, will result in movement of the player object.
+If both players are in the same square, the color of that square will be a combination of the two player's colors. 
 
 
 
@@ -66,13 +74,13 @@ This design seeks to implement a simple game, two players(differentiated by colo
     \label{fig:TopLevelDesign}
 \end{figure}
 
-In order to handle multiple mutliple inputs for each player, several layers of modules have to be created.
+In order to handle multiple multiple inputs for each player, several layers of modules have to be created.
 Each player should handle their own inputs for a controller, with a 2-bit choice bus defining which controller input to use.
 The player module should handle this choice and make a decision on how to read the data and what information to use.
 The player module should also take this input and alternate coordinates on a 2x2 grid. It should ensure that:
 \begin{enumerate}
     \item Ensure a player cannot leave the grid.
-    \item Ensure a player's position cannot be driven by mutiple controllers at once.
+    \item Ensure a player's position cannot be driven by multiple controllers at once.
     \item Recognize that a NES and SNES controller may use the same port; Use Choice to determine which controller type it is.
 \end{enumerate}
 The player module should output an X coordinate and a Y coordinate for the player's position,
@@ -86,10 +94,10 @@ More about VGA is found in Section \ref{vidoutput}.
 Throughout all of the design, a 50 MHz base clock is assumed.
 \paragraph{Inputs:} Two sets of inputs for each player. Each set contains a 2-bit bus 'Choice', 
 representing which controller to use. Each set also contains 3 different single bit serial inputs,
-reprsenting the input from each controller or type, for SNES/NES, PS-2, and IR. A 50 MHz base Clock is also a required input.
+representing the input from each controller or type, for SNES/NES, PS-2, and IR. A 50 MHz base Clock is also a required input.
 \paragraph{Outputs:} Two sets of a Strobe Latch and Shift Clock are outputted, which are specific
  to the possible SNES/NES controller input. The Design also outputs two single bit values H\_Sync and V\_Sync, representing timing specifications for VGA output.
- It also outptus 3 4-bit busses Red, Blue, and Green that are specific to VGA.
+ It also outputs 3 4-bit busses Red, Blue, and Green that are specific to VGA.
 
 
 \section{Video Output}\
@@ -113,7 +121,13 @@ Whenever both the horizontal and vertical states are during Display Time, the co
  
 \section{Controllers}
 \subsection{NES/SNES Controller}
-The NES and SNES controllers utilize three lines to transfer data, along with a ground and 5V power supply. Communication wit the controllers uses a data latch line, clock line and data line. The clock and data latch lines are supplied to the controller, while the data line is generated. When the latch line is driven high, the controllers log the pressed buttons within an active low shift register. The first bit of this register is automatically output on the data line. Whenever the clock input is cycled, the shift register moves along by one bit. The NES controller has eight buttons, and an eight bit shift register, while the SNES has sixteen buttons and a sixteen bit shift register. The data latch can then be cycled to obtain a new set of inputs. For this design, the up, down, left, and right inputs were of interest. Within the NES controller, the zeroth bit of the shift register corresponds to the right input, the first to  the left input, the second to the down input, and the fourth to the up input. The final four inputs were ignored. Within the SNES controller, the up input corresponds to the fifth bit in the shift register, the down input to the sixth bit, the left input to the seventh bit, and the right input to the eight bit. \\~\\
+The NES and SNES controllers utilize three lines to transfer data, along with a ground and 5V power supply.
+Communication wit the controllers uses a data latch line, clock line and data line. The clock and data latch lines are supplied to the controller, while the data line is generated.
+When the latch line is driven high, the controllers log the pressed buttons within an active low shift register. The first bit of this register is automatically output on the data line.
+Whenever the clock input is cycled, the shift register moves along by one bit. The NES controller has eight buttons, and an eight bit shift register, while the SNES has sixteen buttons and a sixteen bit shift register.
+The data latch can then be cycled to obtain a new set of inputs. For this design, the up, down, left, and right inputs were of interest. Within the NES controller, the zeroth bit of the shift register corresponds to the right input,
+the first to the left input, the second to the down input, and the fourth to the up input. The final four inputs were ignored. Within the SNES controller, the up input corresponds to the fifth bit in the shift register,
+the down input to the sixth bit, the left input to the seventh bit, and the right input to the eight bit. \\~\\
 To communicate with the NES or SNES controllers, the host must do the following:
 \begin{itemize}
     \item[1.] Drive the data latch input high to populate the shift register
@@ -150,7 +164,8 @@ The left side of the figure represents what a serial data stream might look like
     \label{fig:rc5Code}
 \end{figure}
 This implementation of IR reception assumes that the IR signal received will be in the form of  Manchester Code, as explained in \ref{subsubsec:selfClockingSignal}.
-There are several standards for IR data transmission. The one assumed to be used for our IR controller is RC-5. RC-5 sends 32 bursts at a frequency of 36 kHz for each time the Manchester Data should be 1, and does not send any data at any other time.
+There are several standards for IR data transmission.
+The one assumed to be used for our IR controller is RC-5. RC-5 sends 32 bursts at a frequency of 36 kHz for each time the Manchester Data should be 1, and does not send any data at any other time.
 This means that the period of the actual Manchester code is 1.125 kHz/1125 Hz. 
 The actual sent Bi-Phase/Manchester code has a certain specification as well. The first two bits sent will always be 1, which helps the receiver gauge timing. Each section of the expected input is as follows:
 \begin{itemize}
@@ -174,7 +189,8 @@ There is a standard for what each bit in the 11 bit sequence represents.  The se
     \item[-] 1 parity bit - Odd parity
     \item[-] 1 stop bit - This is always 1
 \end{itemize}
-The 8 data bits are a unique number that represents a specific key being pressed, or unpressed.  The parity bit is a bit representing how many 1s there are in the data bit.  It functions as a quick and simple error check, if the parity bit does not match the data then you know the data was corrupted somehow.
+The 8 data bits are a unique number that represents a specific key being pressed, or unpressed.  The parity bit is a bit representing how many 1s there are in the data bit.
+It functions as a quick and simple error check, if the parity bit does not match the data then you know the data was corrupted somehow.
 
 \section{HDL Modules}
 \label{hdlModules}
@@ -193,11 +209,27 @@ The 8 data bits are a unique number that represents a specific key being pressed
 	\caption{ModelSim of the NES/SNES controller decoder in SNES mode}
 \end{figure}
 \paragraph{Input:} One bit data representing the current bit from the controller shift register, one bit clock, and two bit mode used to determine which controller is in use(NES or SNES)
-\paragraph{Output:} One bit up, down, left, and right representing the decoded values from the controller, and one bit readable output which is driven high once the current set of values have been decoded. Also present are the one bit strobe latch output, which functions as the data latch for the controller to be driven high then low to log the inputs to the controller, and a one bit shift clock, which is used to shift the values in the controller shift register.
+\paragraph{Output:} One bit up, down, left, and right representing the decoded values from the controller, and one bit readable output which is driven high once the current set of values have been decoded.
+Also present are the one bit strobe latch output, which functions as the data latch for the controller to be driven high then low to log the inputs to the controller, and a one bit shift clock,
+which is used to shift the values in the controller shift register.
 \paragraph{Simulation:} The simulation for this module was broken up into two files, one for each controller type.
-\subparagraph{NES:} For this simulation, the data bit for right was driven low(representing an input of 'right'). The data\_latch is initially driven high. As expected, the decoder logs the right input as pressed, and continues through the inputs by providing a shift\_clock to the controller. Once the data has been cycled three times, all values of interest are accounted for, and the readable output is driven high. After seven cycles of the output, the data\_latch is again driven high and readable is driven low; new inputs are ready to be read. The value of increment represents the current bit of the shift register.
-\subparagraph{SNES:} For this simulation, the data bits for up and left were driven low(representing inputs of 'left' and 'up'). The data\_latch is initially driven high. As expected, the decoder logs the up and left inputs as pressed, and continues through the inputs by providing a shift\_clock to the controller. Once the data has been cycled eight times, all values of interest are accounted for, and the readable output is driven high. After fifteen cycles of the output, the data\_latch is again driven high and readable is driven low; new inputs are ready to be read. The value of increment represents the current bit of the shift register.
-\paragraph{Description:} This module will use the system clock to drive its logic. On the first clock cycle, the data latch output will be driven high to log the controller inputs. The data latch will then be driven low, and the shift clock will be cycled seven times for the NES controller, or fifteen times for the SNES controller, with the bit corresponding to the inputs of interest recorded. Once all inputs of interest have been recorded, the readable output will be driven high, signaling all inputs are accounted for. Pressed buttons on the controllers will be signaled by a high value on the corresponding output from the decoder(up, down, left, or right). 
+\subparagraph{NES:} For this simulation, the data bit for right was driven low(representing an input of 'right'). The data\_latch is initially driven high.
+As expected, the decoder logs the right input as pressed, and continues through the inputs by providing a shift\_clock to the controller.
+Once the data has been cycled three times, all values of interest are accounted for, and the readable output is driven high.
+After seven cycles of the output, the data\_latch is again driven high and readable is driven low; new inputs are ready to be read.
+The value of increment represents the current bit of the shift register.
+\subparagraph{SNES:} For this simulation, the data bits for up and left were driven low(representing inputs of 'left' and 'up').
+The data\_latch is initially driven high. As expected, the decoder logs the up and left inputs as pressed,
+and continues through the inputs by providing a shift\_clock to the controller.
+Once the data has been cycled eight times, all values of interest are accounted for, and the readable output is driven high.
+After fifteen cycles of the output, the data\_latch is again driven high and readable is driven low; new inputs are ready to be read.
+The value of increment represents the current bit of the shift register.
+\paragraph{Description:} This module will use the system clock to drive its logic. On the first clock cycle,
+the data latch output will be driven high to log the controller inputs. The data latch will then be driven low,
+and the shift clock will be cycled seven times for the NES controller, or fifteen times for the SNES controller,
+with the bit corresponding to the inputs of interest recorded. Once all inputs of interest have been recorded,
+the readable output will be driven high, signaling all inputs are accounted for.
+Pressed buttons on the controllers will be signaled by a high value on the corresponding output from the decoder(up, down, left, or right). 
 
 \subsection{IR Input Top Module}
 \begin{figure}[H]\centering
@@ -212,11 +244,15 @@ The 8 data bits are a unique number that represents a specific key being pressed
 \end{figure}
 \paragraph{Input:} One Serial Data stream 'Data', Clock signal.
 \paragraph{Output:} One output for each cardinal direction (Up, Down, Left, Right), and signal describing whether or not the directions are valid or not, 'Readable'.
-\paragraph{Simulation:} TODO
+\paragraph{Simulation:} For this simulation, The same bi-phase input that was used for the parser simulation is used. The data is sent as a 11-1-01101-000010.
+The correct address is received (01101), so it parses the data. A "Down" press corresponds to 000010, so the Left output is raised to HIGH and Readable becomes True since ot now has valid output.
 \paragraph{Description:} For the IR Decoder, it was noted that its output must match the output of any other input decoder, such as the SNES/NES and PS/2.
-Because of this, the Up, Down, Left, Right, and Readable streams were required to be used for this particular module. This particular model 
+Because of this, the Up, Down, Left, Right, and Readable streams were required to be used for this particular module.
+This particular module assumes that Up is 0, Down is 1, left is 2, and Right is 3. See Sections \ref{irclocks}, \ref{irsimplifier},
+and \ref{irparser} for more detailed implementation on particular parts of IR.
 
 \subsubsection{IR Clocks}
+\label{irclocks}
 \begin{figure}[H]\centering
     \includegraphics[width=0.9\linewidth]{figures/IR_Clock_Block.jpg}
     \caption{IR Clock Slowing Block Diagram}
@@ -232,8 +268,9 @@ Because of this, the Up, Down, Left, Right, and Readable streams were required t
 \end{figure}
 \paragraph{Inputs:} Takes in a single 50 MHz Clock.
 \paragraph{Outputs:} Outputs a 144 kHz clock for evaluating pulse simplification, and a 2.25 kHz Clock for evaluating manchester code values.
-\paragraph{Simulation:} In this simulation, a 50 MHz clock was inputted. If one were to count the amount of ticks that were waited, there 174 ticks between the original clock and the Pulse clock. There are 64 ticks between the logic clock and the pulse clock. This is the expected amount. 
-\paragraph{Description:} The IR Input reciever takes in the BPC serial data stream and a 50MHz Clock signal. A slowed clock is generated to slow it down to approximately 72 kHz.
+\paragraph{Simulation:} In this simulation, a 50 MHz clock was inputted. If one were to count the amount of ticks that were waited,
+there 174 ticks between the original clock and the Pulse clock. There are 64 ticks between the logic clock and the pulse clock. This is the expected amount. 
+\paragraph{Description:} The IR Input receiver takes in the BPC serial data stream and a 50MHz Clock signal. A slowed clock is generated to slow it down to approximately 72 kHz.
 This is achieved by dividing the 50 MHz clock by 694. However, if the Clock was flipped every 694 50 MHz cycles, it would have a clock cycle of 36 kHz. 
 To account for this, we must double the resulting clock, by dividing the original clock by 347.
 With the 72 kHz clock, for each rising edge of this clock the IR signal will have either a rising edge or a falling edge. 
@@ -241,6 +278,7 @@ Since the IR signal is asynchronous, meaning its clock will not line up with our
 An example of what the async data vs our internal clock can be found in Figure \ref{fig:asyncIRData}.
 
 \subsubsection{IR Simplifier}
+\label{irsimplifier}
 \begin{figure}[H]\centering
     \includegraphics[width=0.6\linewidth]{figures/IR_Simplifier_Block.jpg}
     \caption{IR Simplifier Block Diagram}
@@ -254,12 +292,18 @@ An example of what the async data vs our internal clock can be found in Figure \
 \end{figure}
 \paragraph{Inputs:} The IR Simplifier takes in the 144 kHz Pulse evaluation clock and the raw data pulses from an IR sensor. 
 \paragraph{Outputs:} A simplified data stream is outputted, as if the raw data did not pulse on HIGH.
-\paragraph{Simulation:} For this simulation, Only two raw data clock pulses were used. While not pulsing, the data was held at LOW, although realistically it would remain at X since no physical data is coming in. However, if it were at X, it would still work since it is only checked if the value is HIGH. No other pulses were used since any further pulses would have been ignored.
+\paragraph{Simulation:} For this simulation, Only two raw data clock pulses were used.
+While not pulsing, the data was held at LOW, although realistically it would remain at X since no physical data is coming in.
+However, if it were at X, it would still work since it is only checked if the value is HIGH. No other pulses were used since any further pulses would have been ignored.
 As can be see from the results of this simulation, Receiving the HIGH pulse made the simplified data output held HIGH for 32 ticks at 32 kHz, or 128 ticks at our faster 144 kHz.
-\paragraph{Description:} The rising edge of a clock occurs frequently enough that an average of two rising edges occurs on each pulse. As soon as a HIGH value is read, the rest of the input values are ignored and 32 ticks at 32 kHz are waited for. During this time, the simplified output is held at HIGH under the assumption that the IR data is still high. The parser should account for this as it is possible to be corrupted.
+\paragraph{Description:} The rising edge of a clock occurs frequently enough that an average of two rising edges occurs on each pulse.
+As soon as a HIGH value is read, the rest of the input values are ignored and 32 ticks at 32 kHz are waited for.
+During this time, the simplified output is held at HIGH under the assumption that the IR data is still high.
+The parser should account for this as it is possible to be corrupted.
 
 
 \subsubsection{IR Parser}
+\label{irparser}
 \begin{figure}[H]\centering
     \includegraphics[width=0.5\linewidth]{figures/IR_Parser_Block.jpg}
     \caption{IR Parser Block Diagram}
@@ -271,11 +315,17 @@ As can be see from the results of this simulation, Receiving the HIGH pulse made
     \label{fig:irParserSim}
 \end{figure}
 \paragraph{Inputs:} The IR parser takes in a 2.25 kHz clock and a simplified Data stream in manchester encoding, following RC-5 specification.
-\paragraph{Outputs:} The parser outputs Up, Down, Left, Right, to correspond which button was being pressed on this key press. It also outptus readable, specifying whether or not the output data is currently valid.
-\paragraph{Description:} The IR parser's job is to have a rising edge for each falling and rising edge of the RC-5 code. Because of this, the IR data can come in at an asynchronous pace not ligning up with its own clock, and it will still read data correctly. 
-The start bits help the parser decide when to actually start parsing and when it is at rest. It then reads in the toggle bit which is not used for this design project. It then reads the address, which is  hard coded for this project to be 01101. If the read address matches the internal address, it considers the following 6 data bits to be valid.
+\paragraph{Outputs:} The parser outputs Up, Down, Left, Right, to correspond which button was being pressed on this key press.
+It also outputs readable, specifying whether or not the output data is currently valid.
+\paragraph{Description:} The IR parser's job is to have a rising edge for each falling and rising edge of the RC-5 code.
+Because of this, the IR data can come in at an asynchronous pace not lining up with its own clock, and it will still read data correctly. 
+The start bits help the parser decide when to actually start parsing and when it is at rest.
+It then reads in the toggle bit which is not used for this design project. It then reads the address,
+which is hard coded for this project to be 01101. If the read address matches the internal address, it considers the following 6 data bits to be valid.
 Only 4 possibilities of the 6 data bits are actually used. Values 000000-000010 represent all directions, and any other values are considered other button presses and do not affect the output.
-\paragraph{Simulation:} For the IR parser simulation, The button "Down" was simulated. the manchester stream read in 11-1-01101-000010. The given address matched so it continued on. The value given, 000010, was hard coded to represent a Down key press. As can be seen from the simulation, the output is not changed until this keypress was completed.
+\paragraph{Simulation:} For the IR parser simulation, The button "Left" was simulated. the manchester stream read in 11-1-01101-000010.
+The given address matched so it continued on. The value given, 000010,
+was hard coded to represent a Down key press. As can be seen from the simulation, the output is not changed until this key press was completed.
 \subsection{PS/2 Input Decoder}
 \begin{figure}[H]\centering
     \includegraphics[width=0.5\linewidth]{figures/PS2_Input_Block.png}
@@ -290,7 +340,13 @@ Only 4 possibilities of the 6 data bits are actually used. Values 000000-000010 
 \paragraph{Inputs:} There are two inputs for this module, the CLK and Data signal from the PS/2 Port.
 \paragraph{Outputs:} One output for each cardinal direction (Up, Down, Left, Right), and signal describing whether or not the directions are valid or not, 'Readable'.
 \paragraph{Simulation:} This simulation feeds valid PS/2 inputs that represent the keys W, A, S, and D being pressed down, which should result in the output of Up, Left, Down, then Right.
-\paragraph{Description:} This module essentially functions as a shift register, with some extra logic to handle the PS/2 standard.  It waits for the 2nd bit, and reads each bit from 2 through 9 into a data register, starting with the least significant bit and ending with the most significant bit.  In addition to storing the data, every time a 1 is received it updates an internal parity bit.  The 10th bit is the keyboard's parity bit, and is compared to the internally tracked parity bit.  If they match, it updates the outputs to indicate which key was pressed, depending on which data was transferred.  If the parity bits don't match, nothing occurs.  When the 11th bit is transferred, everything is reset to its initial state.
+\paragraph{Description:} This module essentially functions as a shift register, with some extra logic to handle the PS/2 standard.
+It waits for the 2nd bit, and reads each bit from 2 through 9 into a data register, starting with the least significant bit and ending with the most significant bit.
+In addition to storing the data, every time a 1 is received it updates an internal parity bit.
+The 10th bit is the keyboard's parity bit, and is compared to the internally tracked parity bit.
+If they match, it updates the outputs to indicate which key was pressed, depending on which data was transferred.
+If the parity bits don't match, nothing occurs.
+When the 11th bit is transferred, everything is reset to its initial state.
 
 \subsection{Input Decoder/Multiplexer}
 \begin{figure}[H]\centering
@@ -303,10 +359,15 @@ Only 4 possibilities of the 6 data bits are actually used. Values 000000-000010 
     \caption{Input Decoder Simulation}
     \label{fig:inputDecoderSim}
 \end{figure}
-\paragraph{Inputs:} There are 17 inputs for this module. 5 come from each controller, represnting their Up, Down, Left, Right and Readable. One input is the Choice, deciding which controller to use. Finally, a clock is inputted.
+\paragraph{Inputs:} There are 17 inputs for this module. 5 come from each controller, representing their Up, Down, Left, Right and Readable.
+One input is the Choice, deciding which controller to use. Finally, a clock is inputted.
 \paragraph{Outputs:} The Input Decoder outputs a Up, Down, Left, and Right, which are the value passed through from the controller themselves.
-\paragraph{Simulation:} For this simuation, each of the controllers are tested. PS/2 is tested first, where it sends up and down while not readable, and up and down while readable. The same outputs are tried for both IR and SNES/NES, where all inputs are only readable half of the time. The simulation also shows that some values are driven to 1 from another controller, but are ignored since only one controller can be chosen at once.
-\paragraph{Description:} The input decoder's job is to use the "Choice" bus as well as the "Readable" values for each controller to decide which values to give to the game logic. A 0 corresponds to PS/2, a 1 corresponds to IR, and a 2 or 3 correspond to SNES and NES, respectively. If the chosen controller is Readable, their values are passed through. if not, the values are driven to 0.
+\paragraph{Simulation:} For this simulation, each of the controllers are tested. PS/2 is tested first, where it sends up and down while not readable,
+and up and down while readable. The same outputs are tried for both IR and SNES/NES, where all inputs are only readable half of the time.
+The simulation also shows that some values are driven to 1 from another controller, but are ignored since only one controller can be chosen at once.
+\paragraph{Description:} The input decoder's job is to use the "Choice" bus as well as the "Readable" values for each controller to decide which
+values to give to the game logic. A 0 corresponds to PS/2, a 1 corresponds to IR, and a 2 or 3 correspond to SNES and NES, respectively.
+If the chosen controller is Readable, their values are passed through. if not, the values are driven to 0.
 \subsection{Game Logic Controller}
 \begin{figure}[H]\centering
 	\includegraphics[width=\linewidth]{figures/Game_Logic_Diagram}
@@ -318,8 +379,12 @@ Only 4 possibilities of the 6 data bits are actually used. Values 000000-000010 
 \end{figure}
 \paragraph{Inputs:} One bit inputs for up, down, left, and right
 \paragraph{Outputs:} One bit data inputs for X and Y, representing the position of the player object within the four by four grid where 0,0 is the lower left corner.
-\paragraph{Simulation:} Within this simulation, the initial position of the player, 0,0. The up input is driven high, and as expected the coordinate output for Y also changes to high. Next, a right input is provided, and again the coordinates change such that X is high. After this, down is driven high and then left is driven high, resulting in the coordinates shifting to 0,1 then 0,0. Finally, both up and right are driven high, resulting in a coordinate of 1,1.
-\paragraph{Description:} This module will use combinational logic to determine the coordinate state of a player. The current position is stored within the module, and from the provided values of up, down, left, and right the next position is determined. An input that would result in the player going outside of the coordinate bounds(0,0 to 1,1) is ignored. Multiple inputs can be accepted at once, allowing for diagonal movement.
+\paragraph{Simulation:} Within this simulation, the initial position of the player, 0,0. The up input is driven high, and as expected the coordinate output for Y also changes to high.
+Next, a right input is provided, and again the coordinates change such that X is high. After this, down is driven high and then left is driven high,
+resulting in the coordinates shifting to 0,1 then 0,0. Finally, both up and right are driven high, resulting in a coordinate of 1,1.
+\paragraph{Description:} This module will use combinational logic to determine the coordinate state of a player.
+The current position is stored within the module, and from the provided values of up, down, left, and right the next position is determined.
+An input that would result in the player going outside of the coordinate bounds(0,0 to 1,1) is ignored. Multiple inputs can be accepted at once, allowing for diagonal movement.
 
 \subsection{Player Top Module}
 \begin{figure}[H]\centering
@@ -332,10 +397,12 @@ Only 4 possibilities of the 6 data bits are actually used. Values 000000-000010 
     \caption{Player Simulation}
     \label{fig:playerSim}
 \end{figure}
-\paragraph{Inputs:} The player module takes in 3 1-bit values reprsenting the serial input for all three controllers, a 2-bit Choice of which controller, and a 50 MHz Clock signal.
-\paragraph{Outputs:} The Player module outputs an X and a Y bit reprsenting its position in the 2x2 grid.
-\paragraph{Simulation:} The simulation of the Player module takes in an example data stream for the SNES. after reading in several clock cycles of values, it is decided to move the Y coordinate up to 1 since the keypress was Up.
-\paragraph{Description:} The Player's job is to take in all inputs from all possible controllers, pick the one to be used. It then handles any game logic for its position, such as running of screen based on controller input of Up, Down, Left, and Right. It then outputs its dynamic coordinate data.
+\paragraph{Inputs:} The player module takes in 3 1-bit values representing the serial input for all three controllers, a 2-bit Choice of which controller, and a 50 MHz Clock signal.
+\paragraph{Outputs:} The Player module outputs an X and a Y bit representing its position in the 2x2 grid.
+\paragraph{Simulation:} The simulation of the Player module takes in an example data stream for the SNES.
+after reading in several clock cycles of values, it is decided to move the Y coordinate up to 1 since the key press was Up.
+\paragraph{Description:} The Player's job is to take in all inputs from all possible controllers, pick the one to be used. It then handles any game logic for its position,
+such as running of screen based on controller input of Up, Down, Left, and Right. It then outputs its dynamic coordinate data.
 
 \subsection{Pixel Counter}
 \begin{figure}[H]\centering
@@ -359,9 +426,14 @@ Only 4 possibilities of the 6 data bits are actually used. Values 000000-000010 
     \label{fig:pixelCounterSimPixels}
 \end{figure}
 \paragraph{Inputs:} A 50MHz clock signal.
-\paragraph{Outputs:} X and Y coordinates indicating the current pixel being drawn on the monitor, an HSync and VSync signal that is fed directly to the VGA output, and a nocolor signal indicating when the color outputs on the VGA should be brought to 0.
-\paragraph{Simulation:} In this simulation, the only input provided is that of a 50MHz clock signal.  The output is sampled for an entire second, and then the waves can be viewed to verify that the timing of all the outputs is correct.
-\paragraph{Description:} Every clock pulse, a clock enable bit is flipped, and the logic is only updated when the clock enable is 1.  There are two internal registers, xstate and ystate, which keep track of the current state in the current row and column.  It will drive nocolor to 1 when there should be no color output, and pulse HSync and VSync whenever they need to be pulsed, according to the timings for a 640 x 480 60Hz signal (described in Section \ref{vidoutput}).
+\paragraph{Outputs:} X and Y coordinates indicating the current pixel being drawn on the monitor, an HSync and VSync signal that is fed directly to the VGA output,
+and a nocolor signal indicating when the color outputs on the VGA should be brought to 0.
+\paragraph{Simulation:} In this simulation, the only input provided is that of a 50MHz clock signal.
+The output is sampled for an entire second, and then the waves can be viewed to verify that the timing of all the outputs is correct.
+\paragraph{Description:} Every clock pulse, a clock enable bit is flipped, and the logic is only updated when the clock enable is 1.
+There are two internal registers, xstate and ystate, which keep track of the current state in the current row and column.
+It will drive nocolor to 1 when there should be no color output, and pulse HSync and VSync whenever they need to be pulsed,
+according to the timings for a 640 x 480 60Hz signal (described in Section \ref{vidoutput}).
 
 \subsection{Renderer}
 \begin{figure}[H]\centering
@@ -374,22 +446,57 @@ Only 4 possibilities of the 6 data bits are actually used. Values 000000-000010 
     \caption{Renderer Simulation}
     \label{fig:rendererSim}
 \end{figure}
-\paragraph{Inputs:} 4 bits that indicate the x and y coordinate of both players, a nocolor signal indicating when the Renderer needs to output low for all colors as part of VGA timings, and the x and y coordinate of the current pixel being drawn by VGA.
+\paragraph{Inputs:} 4 bits that indicate the x and y coordinate of both players, a nocolor signal indicating when the Renderer needs to output low for all colors as part of VGA timings,
+and the x and y coordinate of the current pixel being drawn by VGA.
 \paragraph{Outputs:} The Red, Green, and Blue values for the current pixel being rendered, represented as three four bit values. 
-\paragraph{Simulation:} In this simulation, it drives the x and y inputs to 4 coordinates, one in each quadrant.  For each coordinate, it drives the player locations of each player such that it tests the four possible color states for each coordinate: no players in quadrant, player 1 in quadrant, player 2 in quadrant, both players in quadrant.  Finally, it drives nocolor to 1, to test that color output is set to 0 when nocolor is 1.
-\paragraph{Description:} If the nocolor input is 1, all color outputs are driven to 0.  Next, it will immediately drive green to 0 as it's not used in our display.  Next, it will check what quadrant of the screen the current pixel being drawn is in, and what players are located in that quadrant.  If player 1 is in the quadrant, red is driven to full color, otherwise it's driven to 0.  Same for player 2 and blue.
+\paragraph{Simulation:} In this simulation, it drives the x and y inputs to 4 coordinates, one in each quadrant.
+For each coordinate, it drives the player locations of each player such that it tests the four possible color states for each coordinate: no players in quadrant,
+player 1 in quadrant, player 2 in quadrant, both players in quadrant.  Finally, it drives nocolor to 1, to test that color output is set to 0 when nocolor is 1.
+\paragraph{Description:} If the nocolor input is 1, all color outputs are driven to 0.  Next, it will immediately drive green to 0 as it's not used in our display.
+Next, it will check what quadrant of the screen the current pixel being drawn is in, and what players are located in that quadrant.
+If player 1 is in the quadrant, red is driven to full color, otherwise it's driven to 0.  Same for player 2 and blue.
 
 \section{Putting it Together}
-Creating the top module consisted of putting all of the modules specified in Section \ref{hdlModules} together. The top-most modules that the top module interfaces directly with are the Player, Pixel Counter, and Renderer. All that is needed is 3 single bit inputs for each player for each controller, a choice of controller for each player, and a 50 MHz clock. The resulting simulation can be found in Figure \ref{fig:topSim}.
+Creating the top module consisted of putting all of the modules specified in Section \ref{hdlModules} together.
+The top-most modules that the top module interfaces directly with are the Player, Pixel Counter, and Renderer.
+All that is needed is 3 single bit inputs for each player for each controller, a choice of controller for each player,
+and a 50 MHz clock. The resulting simulation can be found in Figure \ref{fig:topSim}.
 \begin{figure}[H]\centering
     \includegraphics[width=\linewidth]{figures/Top_Sim.png}
     \caption{Top Level Simulation}
     \label{fig:topSim}
 \end{figure}
-The resulting image shows the position and pixel colors changing based on the clock. Since there are many inputs and outputs, a small section of time is show in the figure. However, an extended diagram would show the continuation of a full frame and a re render of the bottom left location, changing its color from purple.
+The resulting image shows the position and pixel colors changing based on the clock.
+Since there are many inputs and outputs, a small section of time is show in the figure.
+However, an extended diagram would show the continuation of a full frame and a re render of the bottom left location, changing its color from purple.
 An issue with this simulation is that controller inputs happen to fast- an actual player could not press buttons at any rate specified by our given clocks.
 \section{Extra Implementation}
-Our group decided to implement functionality for two player as our bonus feature. Each player has a separate controller, and the players are represented on the screen by blocks of different colors, one red and one blue. The players are both confined to the 2x2 grid, but if both player happen to occupy the same square, they will collide, producing a block colored as a mix between the two players, in this case, black. Players are free to continue moving after collision.
+Our group decided to implement functionality for two player as our bonus feature.
+Each player has a separate controller, and the players are represented on the screen by blocks of different colors, one red and one blue.
+The players are both confined to the 2x2 grid, but if both player happen to occupy the same square, they will collide, producing a block colored as a mix between the two players,
+in this case, black. Players are free to continue moving after collision.
+
+\begin{thebibliography}{99}
+    \bibitem{manchesterCode} 
+    Davis, Larry. Encoding Dictionary; Manchester Encoding.
+    \\\texttt{http://www.interfacebus.com/manchester-encoding.html}
+
+    \bibitem{rc5Timing}
+    Bergmans, Sam. Philips RC-5 Protocol.
+    \\\texttt{https://www.sbprojects.net/knowledge/ir/rc5.php}
+
+    \bibitem{vishayIr}
+    Vishay. Data Formats for IR Remote Control. 
+    \\\texttt{https://www.vishay.com/docs/80071/dataform.pdf}
+    
+    \bibitem{vgaFrameDiagram}
+    Image. Eric Eastwood. StackOverflow.  VGA Decoding - Dealing with tolerances
+    \\\texttt{https://electronics.stackexchange.com/questions/92900/vga-decoding-dealing-with-tolerances}
+    
+    \bibitem{vgaTimingDiagram}
+    Image. Thomas Crosley. Stack Overflow.  How exactly does a VGA cable work?
+    \\\texttt{https://electronics.stackexchange.com/questions/166681/how-exactly-does-a-vga-cable-work}
+\end{thebibliography}
 
 \section{Appendix}
 Source code of this pdf, as well as well as helpful scripts and original figures used in this document can be found in its repository, available at \\\texttt{https://github.com/drewsortega/DigitalLogicVGA}
@@ -439,27 +546,5 @@ Source code of this pdf, as well as well as helpful scripts and original figures
 \lstinputlisting{../.do_files/XYCounter_Sim.do}
 \subsubsection{Renderer}
 \lstinputlisting{../.do_files/Renderer_Sim.do}
-
-\begin{thebibliography}{99}
-    \bibitem{manchesterCode} 
-    Davis, Larry. Encoding Dictionary; Manchester Encoding.
-    \\\texttt{http://www.interfacebus.com/manchester-encoding.html}
-
-    \bibitem{rc5Timing}
-    Bergmans, Sam. Philips RC-5 Protocol.
-    \\\texttt{https://www.sbprojects.net/knowledge/ir/rc5.php}
-
-    \bibitem{vishayIr}
-    Vishay. Data Formats for IR Remote Control. 
-    \\\texttt{https://www.vishay.com/docs/80071/dataform.pdf}
-    
-    \bibitem{vgaFrameDiagram}
-    Image. Eric Eastwood. StackOverflow.  VGA Decoding - Dealing with tolerances
-    \\\texttt{https://electronics.stackexchange.com/questions/92900/vga-decoding-dealing-with-tolerances}
-    
-    \bibitem{vgaTimingDiagram}
-    Image. Thomas Crosley. Stack Overflow.  How exactly does a VGA cable work?
-    \\\texttt{https://electronics.stackexchange.com/questions/166681/how-exactly-does-a-vga-cable-work}
-\end{thebibliography}
 
 \end{document} 
