@@ -44,7 +44,10 @@
 \newpage
 
 \section{Introduction}
-TODO
+This design project is meant to create logic capable of receiving data from three different controller inputs: SNES/NES, IR, and PS/2. Using these inputs, the design will allow for control of two separate player objects that will interact when occupying the same square in a grid. The type of input used will be determined by a two bit mode input. Communication with each controller will be handled by separate decoders, and the data from each controller will be fed into the top level module, and decoded into the desired inputs: up, down, left, and right. The inputs pressed will determine the output displayed through a VGA output, which will consist of a 2x2 grid with squares being empty or filled by a player object, signified by a change in color. The VGA counter and decoder are based on designs from the ECE272 lab course. \\~\\
+This design seeks to implement a simple game, two players(differentiated by color) in a grid that can collide with each other. The inputs for each player are handled separately, and ??as a result the input for either player can differ from the other. Specific inputs from each type of controller are mapped to the up, down, left, and right movements, and pressing those buttons, or a combination of them, will result in movement of the player object. If both players are in the same square, the color of that square will be a combination of the two player's colors. 
+
+
 
 \section{Top Level Design}
 \begin{figure}[H]\centering
@@ -112,12 +115,16 @@ The structure and timing of RC 5 Code can be found in Figure \ref{fig:rc5Code}.
 \section{HDL Modules}
 \subsection{NES/SNES input decoder}
 \begin{figure}[H]\centering
-	\includegraphics[width=\linewidth]{NES_Input_Sim.png}
+	\includegraphics[width=\linewidth]{figures/SNES_Input_Diagram}
+	\caption{Block Diagram of the NES/SNES input decoder}
+\end{figure}
+\begin{figure}[H]\centering
+	\includegraphics[width=\linewidth]{figures/NES_Input_Sim.png}
 	\caption{ModelSim of the NES/SNES controller decoder in NES mode.}
 \end{figure}
 
 \begin{figure}[H]\centering
-	\includegraphics[width=\linewidth]{SNES_Input_ModelSim.png}
+	\includegraphics[width=\linewidth]{figures/SNES_Input_ModelSim.png}
 	\caption{ModelSim of the NES/SNES controller decoder in SNES mode}
 \end{figure}
 Inputs: One bit data representing the current bit from the controller shift register, one bit clock, and two bit mode used to determine which controller is in use(NES or SNES)\\~\\
@@ -158,14 +165,14 @@ Because of this, the Up, Down, Left, Right, and Readable streams were required t
     \label{fig:irClockSim}
 \end{figure}
 \begin{figure}[H]\centering
-    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim1.png}
-    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim2.png}
-    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim3.png}
-    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim4.png}
+    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim1}
+    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim2}
+    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim3}
+    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim4}
     \caption{IR data received vs. 72 kHz Clock}
     \label{fig:asyncIRData}
 \end{figure}
-\paragraph{Inputs:} TODOOO
+\paragraph{Inputs:} TODO
 \paragraph{Outputs:} TODO
 \paragraph{Simulation:} TODO 
 \paragraph{Description:} The IR Input reciever takes in the BPC serial data stream and a 50MHz Clock signal. A slowed clock is generated to slow it down to approximately 72 kHz.
@@ -232,7 +239,11 @@ An example of what the async data vs our internal clock can be found in Figure \
 
 \subsection{Game Logic Controller}
 \begin{figure}[H]\centering
-	\includegraphics[width=\linewidth]{Game_Logic_ModelSim.png}
+	\includegraphics[width=\linewidth]{figures/Game_Logic_Diagram}
+	\caption{Block Diagram of the Game Logic Controller}
+\end{figure}
+\begin{figure}[H]\centering
+	\includegraphics[width=\linewidth]{figures/Game_Logic_ModelSim.png}
 	\caption{ModelSim of the Game Logic Controller.}
 \end{figure}
 Inputs: One bit inputs for up, down, left, and right\\~\\
@@ -258,14 +269,15 @@ This module will use combinational logic to determine the coordinate state of a 
 \paragraph{Description:} TODO
 
 \subsection{Pixel Counter}
-\paragraph{Inputs:} TODO
-\paragraph{Outputs:} TODO
-\paragraph{Simulation:} TODO
-\paragraph{Description:} TODO
+Inputs: A 50MHz clock signal. \\~\\
+Outputs: X and Y coordinates indicating the current pixel being drawn on the monitor, an HSync and VSync signal that is fed directly to the VGA output, and a nocolor signal indicating when the color outputs on the VGA should be brought to 0. \\~\\
+Simulation: \\~\\
+In this simulation, the only input provided is that of a 50MHz clock signal.  The output is sampled for an entire second, and then the waves can be viewed to verify that the timing of all the outputs is correct. \\~\\
+TODO
 
 \subsection{Renderer}
-\paragraph{Inputs:} TODO
-\paragraph{Outputs:} TODO
+Inputs: 4 bits that indicate the x and y coordinate of both players, a nocolor signal indicating when the Renderer needs to output low for all colors as part of VGA timings, and the x and y coordinate of the current pixel being drawn by VGA. \\~\\
+Outputs: 
 \paragraph{Simulation:} TODO
 \paragraph{Description:} TODO
 
