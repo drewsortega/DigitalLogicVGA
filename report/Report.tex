@@ -393,7 +393,7 @@ Creating the top module consisted of putting all of the modules specified in Sec
 The resulting image shows the position and pixel colors changing based on the clock. Since there are many inputs and outputs, a small section of time is show in the figure. However, an extended diagram would show the continuation of a full frame and a re render of the bottom left location, changing its color from purple.
 An issue with this simulation is that controller inputs happen to fast- an actual player could not press buttons at any rate specified by our given clocks.
 \section{Extra Implementation}
-TODO
+Our group decided to implement functionality for two player as our bonus feature. Each player has a separate controller, and the players are represented on the screen by blocks of different colors, one red and one blue. The players are both confined to the 2x2 grid, but if both player happen to occupy the same square, they will collide, producing a block colored as a mix between the two players, in this case, black. Players are free to continue moving after collision.
 
 \section{Appendix}
 Source code of this pdf, as well as well as helpful scripts and original figures used in this document can be found in its repository, available at \\\texttt{https://github.com/drewsortega/DigitalLogicVGA}
