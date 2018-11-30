@@ -44,7 +44,10 @@
 \newpage
 
 \section{Introduction}
-TODO
+This design project is meant to create logic capable of receiving data from three different controller inputs: SNES/NES, IR, and PS/2. Using these inputs, the design will allow for control of two separate player objects that will interact when occupying the same square in a grid. The type of input used will be determined by a two bit mode input. Communication with each controller will be handled by separate decoders, and the data from each controller will be fed into the top level module, and decoded into the desired inputs: up, down, left, and right. The inputs pressed will determine the output displayed through a VGA output, which will consist of a 2x2 grid with squares being empty or filled by a player object, signified by a change in color. The VGA counter and decoder are based on designs from the ECE272 lab course. \\~\\
+This design seeks to implement a simple game, two players(differentiated by color) in a grid that can collide with each other. The inputs for each player are handled separately, and ??as a result the input for either player can differ from the other. Specific inputs from each type of controller are mapped to the up, down, left, and right movements, and pressing those buttons, or a combination of them, will result in movement of the player object. If both players are in the same square, the color of that square will be a combination of the two player's colors. 
+
+
 
 \section{Top Level Design}
 \paragraph{Inputs:} TODO
@@ -110,12 +113,12 @@ The structure and timing of RC 5 Code can be found in Figure \ref{fig:rc5Code}.
 \section{HDL Modules}
 \subsection{NES/SNES input decoder}
 \begin{figure}[H]\centering
-	\includegraphics[width=\linewidth]{NES_Input_Sim.png}
+	\includegraphics[width=\linewidth]{figures/NES_Input_Sim.png}
 	\caption{ModelSim of the NES/SNES controller decoder in NES mode.}
 \end{figure}
 
 \begin{figure}[H]\centering
-	\includegraphics[width=\linewidth]{SNES_Input_ModelSim.png}
+	\includegraphics[width=\linewidth]{figures/SNES_Input_ModelSim.png}
 	\caption{ModelSim of the NES/SNES controller decoder in SNES mode}
 \end{figure}
 Inputs: One bit data representing the current bit from the controller shift register, one bit clock, and two bit mode used to determine which controller is in use(NES or SNES)\\~\\
@@ -156,10 +159,10 @@ Because of this, the Up, Down, Left, Right, and Readable streams were required t
     \label{fig:irClockSim}
 \end{figure}
 \begin{figure}[H]\centering
-    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim1.png}
-    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim2.png}
-    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim3.png}
-    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim4.png}
+    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim1}
+    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim2}
+    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim3}
+    \includegraphics[width=\linewidth]{figures/IR_Clock_Sim4}
     \caption{IR data received vs. 72 kHz Clock}
     \label{fig:asyncIRData}
 \end{figure}
@@ -230,7 +233,7 @@ An example of what the async data vs our internal clock can be found in Figure \
 
 \subsection{Game Logic Controller}
 \begin{figure}[H]\centering
-	\includegraphics[width=\linewidth]{Game_Logic_ModelSim.png}
+	\includegraphics[width=\linewidth]{figures/Game_Logic_ModelSim.png}
 	\caption{ModelSim of the Game Logic Controller.}
 \end{figure}
 Inputs: One bit inputs for up, down, left, and right\\~\\
