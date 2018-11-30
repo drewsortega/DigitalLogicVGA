@@ -53,7 +53,7 @@ This design seeks to implement a simple game, two players(differentiated by colo
 \begin{figure}[H]\centering
     \includegraphics[width=\linewidth]{figures/Top_Block.jpg}
     \caption{Top Level Design Block Diagram} 
-    \label{fig:biPhaseExample}
+    \label{fig:TopLevelDesign}
 \end{figure}
 TODO
 
@@ -161,20 +161,15 @@ Because of this, the Up, Down, Left, Right, and Readable streams were required t
     \label{fig:irClockBlock}
 \end{figure}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
-    \caption{IR Clock Simulation}
-    \label{fig:irClockSim}
-\end{figure}
-\begin{figure}[H]\centering
     \includegraphics[width=\linewidth]{figures/IR_Clock_Sim1}
     \includegraphics[width=\linewidth]{figures/IR_Clock_Sim2}
     \includegraphics[width=\linewidth]{figures/IR_Clock_Sim3}
     \includegraphics[width=\linewidth]{figures/IR_Clock_Sim4}
-    \caption{IR data received vs. 72 kHz Clock}
+    \caption{IR Clock Sim}
     \label{fig:asyncIRData}
 \end{figure}
-\paragraph{Inputs:} TODO
-\paragraph{Outputs:} TODO
+\paragraph{Inputs:} Takes in a single 50 MHz Clock.
+\paragraph{Outputs:} Outputs a 
 \paragraph{Simulation:} TODO 
 \paragraph{Description:} The IR Input reciever takes in the BPC serial data stream and a 50MHz Clock signal. A slowed clock is generated to slow it down to approximately 72 kHz.
 This is achieved by dividing the 50 MHz clock by 694. However, if the Clock was flipped every 694 50 MHz cycles, it would have a clock cycle of 36 kHz. 
@@ -190,7 +185,8 @@ An example of what the async data vs our internal clock can be found in Figure \
     \label{fig:irSimplifierBlock}
 \end{figure}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \includegraphics[width=\linewidth]{figures/IR_Simplifier_Sim1.png}
+    \includegraphics[width=\linewidth]{figures/IR_Simplifier_Sim2.png}
     \caption{IR Simplifier Simulation}
     \label{fig:irSimplifierSim}
 \end{figure}
@@ -203,7 +199,7 @@ An example of what the async data vs our internal clock can be found in Figure \
 \subsubsection{IR Parser}
 \begin{figure}[H]\centering
     \includegraphics[width=0.5\linewidth]{figures/IR_Parser_Block.jpg}
-    \caption{IR Decoder Simulation}
+    \caption{IR Parser Block Diagram}
     \label{fig:irParserBlock}
 \end{figure}
 \begin{figure}[H]\centering
@@ -235,13 +231,13 @@ An example of what the async data vs our internal clock can be found in Figure \
 \subsection{Input Decoder/Multiplexer}
 \begin{figure}[H]\centering
     \includegraphics[width=0.5\linewidth]{figures/Input_Decoder_Block.jpg}
-    \caption{IR Decoder Simulation}
-    \label{fig:irParserBlock}
+    \caption{Input Decoder Block Diagram}
+    \label{fig:inputDecoderBlock}
 \end{figure}
 \begin{figure}[H]\centering
     \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
     \caption{Input Decoder Simulation}
-    \label{fig:irParserSim}
+    \label{fig:inputDecoderSum}
 \end{figure}
 \paragraph{Inputs:} TODO
 \paragraph{Outputs:} TODO
@@ -265,13 +261,13 @@ An example of what the async data vs our internal clock can be found in Figure \
 \subsection{Player Top Module}
 \begin{figure}[H]\centering
     \includegraphics[width=\linewidth]{figures/Player_Block.jpg}
-    \caption{Player Simulation}
-    \label{fig:irParserBlock}
+    \caption{Player Block Diagram}
+    \label{fig:playerBlock}
 \end{figure}
 \begin{figure}[H]\centering
     \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
     \caption{Player Simulation}
-    \label{fig:irParserSim}
+    \label{fig:playerSim}
 \end{figure}
 \paragraph{Inputs:} TODO
 \paragraph{Outputs:} TODO

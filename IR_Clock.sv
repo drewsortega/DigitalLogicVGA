@@ -14,15 +14,16 @@ always_ff @(posedge In_Clock) begin
 
     // 50000/(36*8) = ~174.
     // Therefore 4 rising edges for every 36 kHz pulse. This guarentees that 
-    // 0-173 = 174 states. f=~46kHz
-    // accounts for 0-692
+    // 0-173 = 174 states. f=~144 kHz
+
+    // Wait for 64 ticks on the 144 kHz, should have rising edge for every rising and falling edge of data.
     if(Initialized == 1'b0) begin
         Out_Clock_Pulse <= 0;
         Out_Clock_Logic <= 0;
         Initialized <= 1;
     end
     else begin
-        if(Count < 174) begin // accounts for 0-173
+        if(Count < 173) begin
             if(^Out_Clock_Pulse == 1'bx) begin
                 Out_Clock_Pulse <= 1'b0;
             end
@@ -31,7 +32,7 @@ always_ff @(posedge In_Clock) begin
             end
             Count <= Count + 1;
         end
-        else begin // accounts for 174
+        else begin // accounts for 173
             if(Out_Clock_Pulse == 0) begin
                 Out_Clock_Pulse <= 1;
                 if(Count2 < 63) begin //acounts for 0-62
