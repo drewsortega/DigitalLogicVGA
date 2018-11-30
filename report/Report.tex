@@ -57,7 +57,8 @@ This design seeks to implement a simple game, two players(differentiated by colo
 \end{figure}
 TODO
 
-\section{Video Output}
+\section{Video Output}\
+\label{vidoutput}
 TODO
 
 \section{Controllers}
@@ -216,10 +217,10 @@ An example of what the async data vs our internal clock can be found in Figure \
 \paragraph{Description:} TODO
 
 \subsection{PS/2 Input Decoder}
-\paragraph{Inputs:} TODO
-\paragraph{Outputs:} TODO
-\paragraph{Simulation:} TODO
-\paragraph{Description:} TODO
+\paragraph{Inputs:} There are two inputs for this module, the CLK and Data signal from the PS/2 Port.
+\paragraph{Outputs:} One output for each cardinal direction (Up, Down, Left, Right), and signal describing whether or not the directions are valid or not, 'Readable'.
+\paragraph{Simulation:} This simulation feeds valid PS/2 inputs that represent the keys W, A, S, and D being pressed down, which should result in the output of Up, Left, Down, then Right.
+\paragraph{Description:} This module essentially functions as a shift register, with some extra logic to handle the PS/2 standard.  It waits for the 2nd bit, and reads each bit from 2 through 9 into a data register, starting with the least significant bit and ending with the most significant bit.  In addition to storing the data, every time a 1 is received it updates an internal parity bit.  The 10th bit is the keyboard's parity bit, and is compared to the internally tracked parity bit.  If they match, it updates the outputs to indicate which key was pressed, depending on which data was transferred.  If the parity bits don't match, nothing occurs.  When the 11th bit is transferred, everything is reset to its initial state.
 
 \subsection{Input Decoder/Multiplexer}
 \begin{figure}[H]\centering
@@ -271,13 +272,13 @@ An example of what the async data vs our internal clock can be found in Figure \
 \paragraph{Inputs:} A 50MHz clock signal.
 \paragraph{Outputs:} X and Y coordinates indicating the current pixel being drawn on the monitor, an HSync and VSync signal that is fed directly to the VGA output, and a nocolor signal indicating when the color outputs on the VGA should be brought to 0.
 \paragraph{Simulation:} In this simulation, the only input provided is that of a 50MHz clock signal.  The output is sampled for an entire second, and then the waves can be viewed to verify that the timing of all the outputs is correct.
-\paragraph{Description:} Every clock pulse, a clock enable bit is flipped, and the logic is only updated when the clock enable is 1.
+\paragraph{Description:} Every clock pulse, a clock enable bit is flipped, and the logic is only updated when the clock enable is 1.  There are two internal registers, xstate and ystate, which keep track of the current state in the current row and column.  It will drive nocolor to 1 when there should be no color output, and pulse HSync and VSync whenever they need to be pulsed, according to the timings for a 640 x 480 60Hz signal (described in Section \ref{vidoutput}).
 
 \subsection{Renderer}
 \paragraph{Inputs:} 4 bits that indicate the x and y coordinate of both players, a nocolor signal indicating when the Renderer needs to output low for all colors as part of VGA timings, and the x and y coordinate of the current pixel being drawn by VGA.
 \paragraph{Outputs:} The Red, Green, and Blue values for the current pixel being rendered, represented as three four bit values. 
-\paragraph{Simulation:} TODO
-\paragraph{Description:} TODO
+\paragraph{Simulation:} In this simulation, it drives the x and y inputs to 4 coordinates, one in each quadrant.  For each coordinate, it drives the player locations of each player such that it tests the four possible color states for each coordinate: no players in quadrant, player 1 in quadrant, player 2 in quadrant, both players in quadrant.  Finally, it drives nocolor to 1, to test that color output is set to 0 when nocolor is 1.
+\paragraph{Description:} If the nocolor input is 1, all color outputs are driven to 0.  Next, it will immediately drive green to 0 as it's not used in our display.  Next, it will check what quadrant of the screen the current pixel being drawn is in, and what players are located in that quadrant.  If player 1 is in the quadrant, red is driven to full color, otherwise it's driven to 0.  Same for player 2 and blue.
 
 \section{Putting it Together}
 TODO
