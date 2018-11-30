@@ -112,6 +112,18 @@ After the full chunk has been transmitted, the serial data signal is driven to 0
 After the 50 clock cycles, if a button on the controller is still being pressed, the transmitter on the controller will send the same data chunk again, except the toggle bit will be 0 instead of 1.
 If after 50 cycles no data is read, there is no button being pressed or the receiver is not receiving data.\cite{vishayIr}
 The structure and timing of RC 5 Code can be found in Figure \ref{fig:rc5Code}.
+\subsection{PS/2 Controller}
+The standard for PS/2 has multiple possible states for the peripheral device.  It can be in its idle state, a communication halt state, and a host-to-device state.
+For this projects' purposes, we will only implement the idle state, as it is the default state, where the device sends key press and unpress updates to the host.
+The idle state's standard functions almost exactly like a Serial Peripheral Interface.  The negative edge of the clock signal driven by the device indicates the data value for each bit.
+There is a standard for what each bit in the 11 bit sequence represents.  The sequence is as follows:
+\begin{itemize}
+    \item[-] 1 start bit - This is always 0
+    \item[-] 8 data bits - Least significant bit first
+    \item[-] 1 parity bit - Odd parity
+    \item[-] 1 stop bit - This is always 1
+\end{itemize}
+The 8 data bits are a unique number that represents a specific key being pressed, or unpressed.  The parity bit is a bit representing how many 1s there are in the data bit.  It functions as a quick and simple error check, if the parity bit does not match the data then you know the data was corrupted somehow.
 
 \section{HDL Modules}
 \subsection{NES/SNES input decoder}
@@ -281,9 +293,19 @@ An example of what the async data vs our internal clock can be found in Figure \
     \label{fig:pixelCounterBlock}
 \end{figure}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
-    \caption{Pixel Counter Simulation}
-    \label{fig:pixelCounterSim}
+    \includegraphics[width=\linewidth]{figures/XYCounter_Sim_Frame.png}
+    \caption{Pixel Counter Simulation Frame-Scale}
+    \label{fig:pixelCounterSimFrame}
+\end{figure}
+\begin{figure}[H]\centering
+    \includegraphics[width=\linewidth]{figures/XYCounter_Sim_Line.png}
+    \caption{Pixel Counter Simulation Line-Scale}
+    \label{fig:pixelCounterSimLine}
+\end{figure}
+\begin{figure}[H]\centering
+    \includegraphics[width=\linewidth]{figures/XYCounter_Sim_Pixels.png}
+    \caption{Pixel Counter Simulation Pixel-Scale}
+    \label{fig:pixelCounterSimPixels}
 \end{figure}
 \paragraph{Inputs:} A 50MHz clock signal.
 \paragraph{Outputs:} X and Y coordinates indicating the current pixel being drawn on the monitor, an HSync and VSync signal that is fed directly to the VGA output, and a nocolor signal indicating when the color outputs on the VGA should be brought to 0.
@@ -297,7 +319,7 @@ An example of what the async data vs our internal clock can be found in Figure \
     \label{fig:rendererBlock}
 \end{figure}
 \begin{figure}[H]\centering
-    \includegraphics[width=0.5\linewidth]{figures/placeholder.png}
+    \includegraphics[width=\linewidth]{figures/Renderer_Sim.png}
     \caption{Renderer Simulation}
     \label{fig:rendererSim}
 \end{figure}
