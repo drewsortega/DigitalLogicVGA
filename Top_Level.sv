@@ -24,26 +24,33 @@ module Top_Level (
     //video output
     output logic H_Sync,
     output logic V_Sync,
-    output logic Red,
-    output logic Green,
-    output logic Blue
+    output logic[3:0] Red,
+    output logic[3:0] Green,
+    output logic[3:0] Blue
 );
-logic X1, Y1, X2, Y2, XDraw, YDraw, No_Color;
+logic X1, Y1, X2, Y2, No_Color;
+logic[9:0] XDraw, YDraw;
 
 Player player1(.Clock(Clock), 
+    .Choice(Choice_Player1),
     .IRData(IRData1), 
     .PS2Data(PS2Data1), 
-    .SNESData(SNESData1),
+    .NData(SNESData1),
     .X(X1), 
-    .Y(Y1)
+    .Y(Y1),
+    .NStrobe_Latch(NStrobe_Latch1),
+    .NShift_Clock(NShift_Clock1)
 );
 
 Player player2(.Clock(Clock), 
+    .Choice(Choice_Player2),
     .IRData(IRData2), 
     .PS2Data(PS2Data2), 
-    .SNESData(SNESData2),
-    .X(X1), 
-    .Y(Y1)
+    .NData(SNESData2),
+    .X(X2), 
+    .Y(Y2),
+    .NStrobe_Latch(NStrobe_Latch2),
+    .NShift_Clock(NShift_Clock2)
 );
 
 XYCounter counter(
