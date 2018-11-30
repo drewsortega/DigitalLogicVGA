@@ -5,6 +5,8 @@ module IR_Simplifier (
 );
 logic[7:0] Count = 8'b00000000;
 
+//looks for a single HIGH and holds it for 32 cycles at 36 kHz
+
 always_ff @(posedge Clock) begin
     if(Count == 0) begin
         if(In_Data == 1) begin
