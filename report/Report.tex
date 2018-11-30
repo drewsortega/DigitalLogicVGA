@@ -113,14 +113,14 @@ Whenever both the horizontal and vertical states are during Display Time, the co
  
 \section{Controllers}
 \subsection{NES/SNES Controller}
-The NES and SNES controllers utilize three lines to transfer data, along with a ground and 5V power supply. Communication wit the controllers uses a data latch line, clock line and data line. The clock and data latch lines are supplied to the controller, while the data line is generated. When the latch line is driven high, the controllers log the pressed buttons within an active low shift register. The first bit of this register is automatically output on the data line. Whenever the clock input is cycled, the shift register moves along by one bit. The NES controller has eight buttons, and an eight bit shift register, while the SNES has sixteen buttons and a sixteen bit shift register. The data latch can then be cycled to obtain a new set of inputs. For this design, the up, down, left, and right inputs were of interest. Within the NES controller, the zeroth bit of the shift register corresponds to the right input, the first to  the left input, the second to the down input, and the fourth to the up input. The final four inputs were ignored. Within the SNES controller, the up input corresponds to the fifth bit in the shift register, the down input to the sixth bit, the left input to the seventh bit, and the right input to the eight bit. \\~\\
+The NES and SNES controllers utilize three lines to transfer data, along with a ground and 5V power supply. Communication with the controllers uses a data latch line, clock line and data line. The clock and data latch lines are supplied to the controller, while the data line is generated. When the latch line is driven high, the controllers log the pressed buttons within an active low shift register. The first bit of this register is automatically output on the data line. Whenever the clock input is cycled, the shift register moves along by one bit. The NES controller has eight buttons, and an eight bit shift register, while the SNES has sixteen buttons and a sixteen bit shift register. The data latch can then be cycled to obtain a new set of inputs. For this design, the up, down, left, and right inputs were of interest. Within the NES controller, the zeroth bit of the shift register corresponds to the right input, the first to  the left input, the second to the down input, and the fourth to the up input\cite{NESFunction}. The final four inputs were ignored. Within the SNES controller, the up input corresponds to the fifth bit in the shift register, the down input to the sixth bit, the left input to the seventh bit, and the right input to the eight bit\cite{SNESFunction}. \\~\\
 To communicate with the NES or SNES controllers, the host must do the following:
 \begin{itemize}
     \item[1.] Drive the data latch input high to populate the shift register
     \item[2.] The first data bit can now be read
     \item[3.] The clock input should be driven high, then low
     \item[4.] The next data bit can now be read
-    \item[5.] Steps 3-4 should be repeated 7 times for the NES, 15 times for the SNES(as the first bit of the register is already present, one less clock cycle is needed)
+    \item[5.] Steps 3-4 should be repeated 7 times for the NES, 15 times for the SNES(as the first bit of the register is already present, one less clock cycle is needed)\cite{SNESFunction}
 \end{itemize}
 
 \subsection{IR Controller}
@@ -460,6 +460,14 @@ Source code of this pdf, as well as well as helpful scripts and original figures
     \bibitem{vgaTimingDiagram}
     Image. Thomas Crosley. Stack Overflow.  How exactly does a VGA cable work?
     \\\texttt{https://electronics.stackexchange.com/questions/166681/how-exactly-does-a-vga-cable-work}
+
+    \bibitem{SNESFunction}
+    Christy, Jim. Super Nintendo Entertainment System: pinouts and protocol
+    \\\texttt{https://gamefaqs.gamespot.com/snes/916396-super-nintendo/faqs/5395}
+
+    \bibitem{NESFunction}
+    Booth, Taylor. Hacking into an old NES controller
+    \\\texttt{http://www.taylorbooth.com/NESController.htm}
 \end{thebibliography}
 
 \end{document}
