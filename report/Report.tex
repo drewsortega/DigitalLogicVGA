@@ -350,6 +350,17 @@ When the 11th bit is transferred, everything is reset to its initial state.
 \paragraph{Inputs:} There are 17 inputs for this module. 5 come from each controller, representing their Up, Down, Left, Right and Readable.
 One input is the Choice, deciding which controller to use. Finally, a clock is inputted.
 \paragraph{Outputs:} The Input Decoder outputs a Up, Down, Left, and Right, which are the value passed through from the controller themselves.
+\paragraph{Simulation:} For this simulation, each of the controllers are tested. PS/2 is tested first, where it sends up and down while not readable,
+and up and down while readable. The same outputs are tried for both IR and SNES/NES, where all inputs are only readable half of the time.
+The simulation also shows that some values are driven to 1 from another controller, but are ignored since only one controller can be chosen at once.
+\paragraph{Description:} The input decoder's job is to use the "Choice" bus as well as the "Readable" values for each controller to decide which
+values to give to the game logic. A 0 corresponds to PS/2, a 1 corresponds to IR, and a 2 or 3 correspond to SNES and NES, respectively.
+If the chosen controller is Readable, their values are passed through. if not, the values are driven to 0.
+\subsection{Game Logic Controller}
+\begin{figure}[H]\centering
+	\includegraphics[width=\linewidth]{figures/Game_Logic_Diagram}
+	\caption{Block Diagram of the Game Logic Controller}
+\end{figure}
 \begin{figure}[H]\centering
 	\includegraphics[width=\linewidth]{figures/Game_Logic_ModelSim.png}
     \caption{ModelSim of the Game Logic Controller.}
