@@ -259,5 +259,4 @@ TSWLatexianTemp*
 # standalone packages
 *.sta
 
-report/Report.pdf
 node_modules
