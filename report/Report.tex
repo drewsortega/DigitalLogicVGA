@@ -55,12 +55,12 @@
 
 \section{Introduction}
 This design project is meant to create logic capable of receiving data from three different controller inputs: SNES/NES, IR, and PS/2.
-Using these inputs, the design will allow for control of two separate player objects that will interact when occupying the same square in a grid.
+Using these inputs, the design should implement some form of movement and collision, which in this design will be allowing for control of two separate player objects that will interact when occupying the same square in a grid.
 The type of input used will be determined by a two bit mode input.
-Communication with each controller will be handled by separate decoders, and the data from each controller will be fed into the top level module, and decoded into the desired inputs: up, down, left, and right.
+Communication with each controller will be handled by separate decoders, and the data from each controller will be fed into the top level module, then decoded into the desired inputs: up, down, left, and right.
 The inputs pressed will determine the output displayed through a VGA output, which will consist of a 2x2 grid with squares being empty or filled by a player object, signified by a change in color.
 The VGA counter and decoder are based on designs from the ECE272 lab course. \\~\\
-This design seeks to implement a simple game, two players(differentiated by color) in a grid that can collide with each other.
+This design seeks to implement a simple game, two players(differentiated by color, one red and one blue) in a grid that can collide with each other, resulting in a black coloration.
 The inputs for each player are handled separately, and as a result the input for either player can differ from the other.
 Specific inputs from each type of controller are mapped to the up, down, left, and right movements, and pressing those buttons, or a combination of them, will result in movement of the player object.
 If both players are in the same square, the color of that square will be a combination of the two player's colors. 
@@ -202,8 +202,8 @@ It functions as a quick and simple error check, if the parity bit does not match
 	\includegraphics[width=\linewidth]{figures/SNES_Input_ModelSim.png}
 	\caption{ModelSim of the NES/SNES controller decoder in SNES mode}
 \end{figure}
-\paragraph{Inputs:} One bit data representing the current bit from the controller shift register, one bit clock, and two bit mode used to determine which controller is in use(NES or SNES)
-\paragraph{Outputs:} One bit up, down, left, and right representing the decoded values from the controller, and one bit readable output which is driven high once the current set of values have been decoded. Also present are the one bit strobe latch output, which functions as the data latch for the controller to be driven high then low to log the inputs to the controller, and a one bit shift clock, which is used to shift the values in the controller shift register.
+\paragraph{Inputs:} One bit data representing the current bit from the controller shift register, one bit clock, and two bit mode, of which the least significant bit is used to determine which controller is in use(NES or SNES)
+\paragraph{Outputs:} One bit up, down, left, and right representing the decoded values from the controller, and one bit readable output which is driven high once the current set of values have been decoded. Also present are the one bit strobe latch output, which functions as the data latch for the controller, which is driven high then low to log the inputs to the controller, and a one bit shift clock, which is used to shift the values in the controller shift register.
 \paragraph{Simulation:} The simulation for this module was broken up into two files, one for each controller type.
 \subparagraph{NES:} For this simulation, the data bit for right was driven low(representing an input of 'right'). The data\_latch is initially driven high.
 As expected, the decoder logs the right input as pressed, and continues through the inputs by providing a shift\_clock to the controller.
@@ -355,7 +355,7 @@ One input is the Choice, deciding which controller to use. Finally, a clock is i
     \caption{ModelSim of the Game Logic Controller.}
 \end{figure}
 \paragraph{Inputs:} One bit inputs for up, down, left, and right
-\paragraph{Outputs:} One bit data inputs for X and Y, representing the position of the player object within the four by four grid where 0,0 is the lower left corner.
+\paragraph{Outputs:} One bit data inputs for X and Y, representing the position of the player object within the ftwo by two grid where 0,0 is the lower left corner.
 \paragraph{Simulation:} Within this simulation, the initial position of the player, 0,0. The up input is driven high, and as expected the coordinate output for Y also changes to high.
 Next, a right input is provided, and again the coordinates change such that X is high. After this, down is driven high and then left is driven high,
 resulting in the coordinates shifting to 0,1 then 0,0. Finally, both up and right are driven high, resulting in a coordinate of 1,1.
